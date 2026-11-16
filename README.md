@@ -12,7 +12,43 @@ Requirements fail in three ways, and each has a skill:
 2. **We changed something and broke something else.** Any change to an existing story runs an **impact round** (`impact-analysis`): downstream, upstream and sideways items are classified and the affected ones become `Stale` until re-refined.
 3. **We lost the thread.** Every skill ends with a **next step**, and `/ask-req` reads your artifacts to say where you are.
 
-## Install
+## Installation (30-second setup)
+
+Install via [skills.sh](https://skills.sh) (universal across agents), the Gemini CLI, or clone locally using the install script.
+
+### 1. Get the skills
+
+<details open>
+<summary><strong>Any agent via skills.sh</strong> (Cursor, Claude Code, Codex, Windsurf, OpenCode, Devin...)</summary>
+
+```bash
+npx skills@latest add gugaucb/requirements-skills -a <agent>  # cursor, claude-code, codex, windsurf, opencode, devin...
+```
+
+To let the installer prompt you for your agent, omit `-a`. When asked which skills to take, select all or choose the ones you need (make sure to include `setup-requirements-repo` and `ask-req`).
+
+To update later:
+
+```bash
+npx skills@latest update
+```
+
+</details>
+
+<details>
+<summary><strong>Gemini CLI</strong></summary>
+
+```bash
+gemini skills install https://github.com/gugaucb/requirements-skills.git --path skills/requirements
+gemini skills install https://github.com/gugaucb/requirements-skills.git --path skills/productivity
+```
+
+Re-run both commands to update.
+
+</details>
+
+<details>
+<summary><strong>Local clone and symlink</strong> (scripts/install.sh)</summary>
 
 ```bash
 git clone https://github.com/gugaucb/requirements-skills
@@ -21,7 +57,21 @@ scripts/install.sh /path/to/your/repo/.agents/skills     # Codex, Gemini CLI and
 scripts/install.sh /path/to/your/repo/.claude/skills     # Claude Code
 ```
 
-Symlinks by default (a `git pull` updates them); add `--copy` to copy. Then, in your repo, run **`/setup-requirements-repo`** once (artifact root, output language, tracker, triage roles). New here? Run **`/ask-req`**. Invocation details per harness: [docs/INVOCATION.md](docs/INVOCATION.md).
+Symlinks by default (a `git pull` updates them); pass `--copy` to copy files instead.
+
+</details>
+
+### 2. Run `/setup-requirements-repo`
+
+In your agent inside your target repo, run **`/setup-requirements-repo`** once. It sets up:
+- The artifact directory root (e.g. `artifacts/<product>/`)
+- The output language for requirements
+- Your issue tracker integration (GitHub, GitLab, or local files)
+- Triage roles and labels
+
+### 3. Ask `/ask-req` anytime
+
+New to the repo or unsure what skill to run next? Run **`/ask-req`**. It reads the current artifact state and guides you to the right next step. Detailed invocation guides per harness: [docs/INVOCATION.md](docs/INVOCATION.md).
 
 ## The flow
 
