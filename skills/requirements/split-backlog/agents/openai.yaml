@@ -1,0 +1,5 @@
+interface:
+  display_name: "Split Backlog"
+  short_description: "Break a spec, capability or epic into thin vertical user stories, each declaring its blocking"
+policy:
+  allow_implicit_invocation: false

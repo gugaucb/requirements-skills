@@ -1,0 +1,5 @@
+interface:
+  display_name: "Ask Req"
+  short_description: "Ask which requirements skill or flow fits your situation"
+policy:
+  allow_implicit_invocation: false

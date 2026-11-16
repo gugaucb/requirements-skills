@@ -1,0 +1,5 @@
+interface:
+  display_name: "Wayfinder"
+  short_description: "Plan a huge, foggy requirements effort (more than one session can hold) as a shared map of decision"
+policy:
+  allow_implicit_invocation: false

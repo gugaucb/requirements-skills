@@ -1,0 +1,5 @@
+interface:
+  display_name: "Create Product Vision"
+  short_description: "Turn a Product Owner narrative, idea, brief or existing vision document into a structured"
+policy:
+  allow_implicit_invocation: false

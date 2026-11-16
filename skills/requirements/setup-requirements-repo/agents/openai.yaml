@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup Requirements Repo"
+  short_description: "Configure this repo for the requirements skills (artifact root, issue tracker, output language, ID"
+policy:
+  allow_implicit_invocation: false

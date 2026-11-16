@@ -1,0 +1,3 @@
+interface:
+  display_name: "Define Acceptance Criteria"
+  short_description: "Write externally observable acceptance criteria in Gherkin Given / When / Then using the configured"

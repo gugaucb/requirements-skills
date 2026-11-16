@@ -1,0 +1,5 @@
+interface:
+  display_name: "Handoff"
+  short_description: "Compact the current conversation into a handoff document so another agent or colleague can continue"
+policy:
+  allow_implicit_invocation: false

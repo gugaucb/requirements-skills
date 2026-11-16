@@ -1,0 +1,5 @@
+interface:
+  display_name: "Grill Me"
+  short_description: "A relentless, stateless interview to sharpen a plan, requirement or change"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Specify Requirements"
+  short_description: "Write atomic functional requirements and measurable non-functional requirements into a story's"

@@ -1,0 +1,5 @@
+interface:
+  display_name: "To Spec"
+  short_description: "Turn the current conversation into a requirements spec for one feature or capability"
+policy:
+  allow_implicit_invocation: false

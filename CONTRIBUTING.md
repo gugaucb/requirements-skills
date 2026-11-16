@@ -1,3 +1,5 @@
 # Contributing
 
-Keep each skill focused. Update shared vocabulary, templates, evaluations and README when changing workflow or ID policies. Add tests for activation metadata and cross-links. Never copy confidential PO data into examples. Run validator and unit tests before PR. All contributions are covered by MIT.
+Read `AGENTS.md` and `docs/AUTHORING-SKILLS.md`. A change clears the bar when it describes an observed failure in a real session and does not compose from existing skills.
+
+When you add, rename, remove or re-route a skill: update `skills/*/README.md`, `ask-req`, the README catalog and flow, `docs/FLOW.md`, `docs/DE-PARA.md`, the evaluations and the CHANGELOG, then run `python3 scripts/sync_adapters.py` and the validation commands. Never put confidential PO data in examples. Contributions are covered by MIT.

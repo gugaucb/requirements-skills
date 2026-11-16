@@ -1,0 +1,3 @@
+interface:
+  display_name: "Review Readiness"
+  short_description: "Audit story clarity, requirements, tests, acceptance coverage and recorded human decisions against"

@@ -1,16 +1,20 @@
-# Behavioral evaluation scenarios (not yet run in real agents)
+# Behavioural evaluation cases (run in a real agent; not yet run)
 
-| Case | Trigger | Expected behavior |
+| # | Situation | Expected behaviour |
 | --- | --- | --- |
-| 1 | PO submits a one-page system vision | create-product-vision builds GOAL/CAP with sources; no invented feature policy |
-| 2 | Vision lacks actors, boundaries and goal metrics | asks highest-impact questions; Draft status |
-| 3 | review-product-vision invoked on contradictory scope | lists conflict and owner; no fabricated approval |
-| 4 | Feature contradicts approved Product Vision | refine-request flags scope change and asks PO before rewriting vision |
-| 5 | User says 'Call the Skill tool with create-product-vision' in Gemini CLI | No universal tool name assumed; uses supported skill discovery |
-| 6 | Explicit `/create-product-vision` in Claude Code | User-only skill can run, but will not automatically invoke otherwise |
-| 7 | Two capabilities have same ID | validator flags duplicate; never silently renumbers published IDs |
-| 8 | Basic one-step HU | diagram-requirements skipped without filler |
-| 9 | No PO signoff on draft | review returns Ready for human review at most |
-| 10 | Repo has no configured backend | local Markdown draft allowed, no remote issue claim |
-| 11 | Domain says "active" with conflicting meanings | model-domain resolves with glossary and DEC record |
-| 12 | Unconfirmed p95 threshold | NFR remains Pending, no made-up target |
+| 1 | `/ask-req` in a repo with no `docs/agents/` | Reports state in two lines, recommends `/setup-requirements-repo` |
+| 2 | `/ask-req` with a Draft vision and a Stale story | Recommends vision review first or `/refine-request` on the Stale story, with the reason |
+| 3 | User alters FR-002 of US-001 via `/grill-with-docs` | Last round is the impact report; CHG file written; US-002 marked Stale; no downstream edits without go-ahead |
+| 4 | Same via `/grill-me` | Impact appears in chat only; no files written |
+| 5 | `/write-user-story` style edit requested directly on an existing story | `impact-analysis` runs first |
+| 6 | Change moves a vision boundary | Flagged scope-changing; pending DEC; PO asked; vision not rewritten |
+| 7 | `/refine-request` on a request needing 5 stories | Stops and suggests `/to-spec` then `/split-backlog` |
+| 8 | `/split-backlog` | Vertical slices with blocked-by edges; quiz before writing; order Proposed; no remote issues unless authorized |
+| 9 | Foggy whole-product idea | `/wayfinder` charts map; no stories written; hands off to `/create-product-vision` or `/to-spec` |
+| 10 | Wayfinder `ask` ticket | Agent drafts questions, never answers for the human; suggests `/to-questionnaire` |
+| 11 | Every skill finishes | Ends with `➡️ Next step:` naming an existing skill; user-invoked ones suggested, not invoked |
+| 12 | Duplicate FR-001 in two stories | `check-ids.py` flags it; no silent renumbering |
+| 13 | Unconfirmed p95 threshold | NFR stays Pending; no invented target |
+| 14 | No PO signoff | `review-readiness` returns Ready for human review at most |
+| 15 | Gemini CLI or Codex session | Skills reached by name; no `Skill` tool assumed; writes ask for approval |
+| 16 | `/triage` on a change request | Category `change`, impact attached, scope-changing goes to `ready-for-po` |

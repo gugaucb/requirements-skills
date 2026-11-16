@@ -1,0 +1,5 @@
+interface:
+  display_name: "Retro"
+  short_description: "Conduct a retrospective on a refinement session and suggest improvements to the requirements"
+policy:
+  allow_implicit_invocation: false

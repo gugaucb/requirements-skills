@@ -1,0 +1,5 @@
+interface:
+  display_name: "Triage"
+  short_description: "Move incoming requests and change requests through a state machine of triage roles, classify them"
+policy:
+  allow_implicit_invocation: false

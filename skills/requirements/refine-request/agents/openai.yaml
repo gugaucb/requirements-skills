@@ -1,0 +1,5 @@
+interface:
+  display_name: "Refine Request"
+  short_description: "Refine one story, or one small well-scoped request, end to end into requirements, acceptance"
+policy:
+  allow_implicit_invocation: false

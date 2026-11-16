@@ -1,69 +1,138 @@
-# Requirements Skills v1.2.0
+# Requirements Skills v2.0.0
 
-A **documentation-first**, portable Agent Skills repository for Claude Code, Codex, and Gemini CLI. Transforms PO system vision into goals and capabilities, then incrementally refines requests into Scrum-friendly user stories, requirements, Gherkin, test scenarios and Mermaid diagrams. **Does not generate application source code.** Independent work inspired by [Matt Pocock's skills](https://github.com/mattpocock/skills), without affiliation.
+Small, composable, **harness-neutral** agent skills for **eliciting and documenting requirements**. They turn a Product Owner's vision into goals and capabilities, then into specs, thin vertical user stories, requirements, Gherkin, test scenarios, Mermaid diagrams and a traceability matrix. **They never generate application code.**
 
-## Start here
+The structure follows [Matt Pocock's skills](https://github.com/mattpocock/skills) (independent work, no affiliation): a router, grilling sessions, a wayfinder for foggy efforts, user-invoked orchestrators over model-invoked disciplines. The same names are used where the role is the same. See the [De/Para](docs/DE-PARA.md) (Portuguese).
 
-1. Install the repository in a workspace, keeping hidden `.agents/` and `.claude/` folders.
-2. Explicitly request **`setup-requirements-repo`** to configure tracker, paths, language, IDs and local policy; confirm changes before writes.
-3. Explicitly request **`create-product-vision`** using a PO narrative or document. Output `PRODUCT-VISION.md` with `GOAL-` and `CAP-` identifiers.
-4. Run **`review-product-vision`** and collect PO decisions; then **`refine-request`** for a concrete feature or capability.
-5. Use focused skills on demand; run **`audit-traceability`** and **`review-readiness`** before claiming readiness.
+## Why it exists
 
-### Skill catalog (15)
+Requirements fail in three ways, and each has a skill:
+
+1. **We did not understand each other.** `/grill-with-docs` interviews you round by round and records the shared language and decisions.
+2. **We changed something and broke something else.** Any change to an existing story runs an **impact round** (`impact-analysis`): downstream, upstream and sideways items are classified and the affected ones become `Stale` until re-refined.
+3. **We lost the thread.** Every skill ends with a **next step**, and `/ask-req` reads your artifacts to say where you are.
+
+## Install
+
+```bash
+git clone https://github.com/gugaucb/requirements-skills
+cd requirements-skills
+scripts/install.sh /path/to/your/repo/.agents/skills     # Codex, Gemini CLI and other Agent Skills hosts
+scripts/install.sh /path/to/your/repo/.claude/skills     # Claude Code
+```
+
+Symlinks by default (a `git pull` updates them); add `--copy` to copy. Then, in your repo, run **`/setup-requirements-repo`** once (artifact root, output language, tracker, triage roles). New here? Run **`/ask-req`**. Invocation details per harness: [docs/INVOCATION.md](docs/INVOCATION.md).
+
+## The flow
+
+```mermaid
+flowchart TD
+  ASK("/ask-req<br/>router: reads artifact state") -.-> SETUP
+  SETUP("/setup-requirements-repo<br/>once per repo") --> GRILL
+  TRIAGE("/triage<br/>incoming requests") --> SPEC
+  WAY("/wayfinder<br/>huge foggy effort") --> VISION
+  QUEST("/to-questionnaire<br/>answer sits elsewhere") --> GRILL
+  GRILL("/grill-with-docs<br/>glossary and decisions") --> VISION("/create-product-vision")
+  VISION --> RVIS["review-product-vision"]
+  RVIS --> PO1{"PO approves<br/>vision?"}
+  PO1 -- "no" --> VISION
+  PO1 -- "yes" --> SPEC("/to-spec")
+  SPEC --> SLICE("/split-backlog<br/>vertical slices, blocking edges")
+  SLICE --> REFINE("/refine-request US-NNN<br/>one story, fresh context")
+  REFINE --> BUILD["write-user-story, specify-requirements,<br/>define-acceptance-criteria, design-test-scenarios,<br/>diagram-requirements"]
+  BUILD --> AUDIT["audit-traceability<br/>then review-readiness"]
+  AUDIT --> PO2{"PO review"}
+  PO2 -- "needs changes" --> REFINE
+  PO2 -- "approved" --> MORE{"more stories<br/>on the frontier?"}
+  MORE -- "yes" --> REFINE
+  MORE -- "no" --> RETRO("/retro")
+  CHANGE["change to an existing<br/>story, capability or term"] --> GRILL
+  GRILL -- "change mode" --> IMPACT["impact-analysis<br/>CHG-NNN, items Stale"]
+  IMPACT --> REFINE
+```
+
+More diagrams (on-ramps, change flow, status machine): [docs/FLOW.md](docs/FLOW.md). The diagram is a routing model, not a pipeline: a small, fully specified request skips most of it.
+
+### Main flow in words
+
+1. **Setup** once. 2. **Vision**: `/grill-with-docs`, `/create-product-vision`, review, PO approval recorded as a DEC. 3. **Spec**: `/to-spec`. 4. **Slice**: `/split-backlog`. 5. **Refine** each frontier story with `/refine-request` in a fresh context. 6. **Approve**: the PO reviews; humans approve, skills recommend. 7. **`/retro`**.
+
+### Changing a user story (HU)
+
+`/grill-with-docs` on the change. Its last round is the **impact report**: which FR, AC, TC, sibling stories, glossary terms and decisions are touched, each marked Invalidated, Needs review or Unaffected (checked). The report is saved as `changes/CHG-NNN.md`, impacted items become `Stale`, and `/refine-request` clears them one by one. `Stale` blocks readiness.
+
+## Skill catalog (26)
+
+**User-invoked** (reachable only when you type them; they orchestrate):
 
 | Skill | Purpose |
 | --- | --- |
-| [`setup-requirements-repo`](.agents/skills/setup-requirements-repo/SKILL.md) | Configure repository-level requirements documentation: tracker, artifact location, labels, output language, ID conventions and team workflow. Use only when the user explicitly requests repository setup or changes to setup. |
-| [`initialize-requirements`](.agents/skills/initialize-requirements/SKILL.md) | Initialize product-specific Markdown request, backlog, glossary and decision files using confirmed repository settings. Use when starting documentation for a new product. |
-| [`create-product-vision`](.agents/skills/create-product-vision/SKILL.md) | Turn a Product Owner vision statement, informal idea, brief or existing vision document into a structured PRODUCT-VISION.md with goals, actors, capabilities, boundaries and unresolved questions. Use at product inception or on explicit vision updates. |
-| [`review-product-vision`](.agents/skills/review-product-vision/SKILL.md) | Review a product vision for consistent vocabulary, unapproved assumptions, scope contradictions, measurable goals and coverage of capabilities. Use when asked to assess or approve a draft vision for human review. |
-| [`refine-request`](.agents/skills/refine-request/SKILL.md) | Orchestrate refinement of a specific Product Owner request into user stories, requirements, Gherkin, tests and traceability. Use on concrete feature requests, respecting the approved product vision. |
-| [`interview-product-owner`](.agents/skills/interview-product-owner/SKILL.md) | Ask dependency-ordered questions to resolve unknown business rules, target users, scope, quality constraints or acceptance behavior. Use when PO decisions are missing. |
-| [`model-domain`](.agents/skills/model-domain/SKILL.md) | Define and reconcile business vocabulary, aliases, actors and lifecycle states in a shared glossary and decision log. Use when domain terms are unclear or contradictory. |
-| [`split-backlog`](.agents/skills/split-backlog/SKILL.md) | Split a product capability or epic into small, vertically valuable user stories, with explicit dependencies and PO-owned ordering. Use when backlog items are too broad. |
-| [`write-user-story`](.agents/skills/write-user-story/SKILL.md) | Create or revise classic As a / I want / So that user stories, including explicit scope and links to goals and capabilities. Use when expressing a user outcome. |
-| [`specify-requirements`](.agents/skills/specify-requirements/SKILL.md) | Write atomic functional and measurable non-functional requirements in Markdown tables, with evidence and source decisions. Use when elaborating story behavior and constraints. |
-| [`define-acceptance-criteria`](.agents/skills/define-acceptance-criteria/SKILL.md) | Write externally observable acceptance criteria in Gherkin Given / When / Then using the configured locale. Use for defining acceptance of story requirements. |
-| [`design-test-scenarios`](.agents/skills/design-test-scenarios/SKILL.md) | Derive implementation-independent test scenarios with setup, action, expected evidence and negative cases. Use to verify criteria and requirements. |
-| [`diagram-requirements`](.agents/skills/diagram-requirements/SKILL.md) | Create Mermaid flow, state or sequence diagrams when necessary to clarify a user journey or business rule. Use only for meaningful complexity. |
-| [`audit-traceability`](.agents/skills/audit-traceability/SKILL.md) | Verify links from product goals and capabilities through epics, stories, functional and non-functional requirements, acceptance criteria and tests. Use after changes or before reviews. |
-| [`review-readiness`](.agents/skills/review-readiness/SKILL.md) | Audit story clarity, requirements, tests, acceptance coverage and human decisions under local readiness rules. Use for final refinement review, never to impersonate PO signoff. |
+| [`ask-req`](skills/requirements/ask-req/SKILL.md) | Which skill or flow fits? Reads your artifacts first |
+| [`setup-requirements-repo`](skills/requirements/setup-requirements-repo/SKILL.md) | Configure artifact root, tracker, language, IDs, triage roles |
+| [`grill-with-docs`](skills/requirements/grill-with-docs/SKILL.md) | Interview that records glossary, decisions and change impact |
+| [`grill-me`](skills/productivity/grill-me/SKILL.md) | Stateless interview; writes nothing |
+| [`create-product-vision`](skills/requirements/create-product-vision/SKILL.md) | PO narrative to `PRODUCT-VISION.md` with GOAL and CAP IDs |
+| [`to-spec`](skills/requirements/to-spec/SKILL.md) | Conversation to a feature spec; no interview |
+| [`split-backlog`](skills/requirements/split-backlog/SKILL.md) | Spec to thin vertical stories with blocking edges |
+| [`refine-request`](skills/requirements/refine-request/SKILL.md) | One story to requirements, AC, tests and traceability |
+| [`triage`](skills/requirements/triage/SKILL.md) | Incoming and change requests through triage roles |
+| [`wayfinder`](skills/requirements/wayfinder/SKILL.md) | Map of decision tickets for huge foggy efforts |
+| [`to-questionnaire`](skills/productivity/to-questionnaire/SKILL.md) | Questionnaire for a stakeholder who holds the answer |
+| [`handoff`](skills/productivity/handoff/SKILL.md) | Portable summary for another agent or colleague |
+| [`wait-what`](skills/productivity/wait-what/SKILL.md) | The last message did not land: re-pitch it |
+| [`retro`](skills/requirements/retro/SKILL.md) | Improve the requirements environment after a session |
 
-## Artifact structure
+**Model-invoked** (the agent may reach for them; the orchestrators above invoke them):
+
+| Skill | Purpose |
+| --- | --- |
+| [`grilling`](skills/productivity/grilling/SKILL.md) | Interview primitive: rounds, frontier, change mode |
+| [`impact-analysis`](skills/requirements/impact-analysis/SKILL.md) | Downstream, upstream and sideways impact of a change |
+| [`domain-modeling`](skills/requirements/domain-modeling/SKILL.md) | Business vocabulary and decisions |
+| [`review-product-vision`](skills/requirements/review-product-vision/SKILL.md) | Review a vision for consistency and coverage |
+| [`write-user-story`](skills/requirements/write-user-story/SKILL.md) | As a / I want / So that story file |
+| [`specify-requirements`](skills/requirements/specify-requirements/SKILL.md) | Atomic FR and measurable NFR |
+| [`define-acceptance-criteria`](skills/requirements/define-acceptance-criteria/SKILL.md) | Gherkin acceptance criteria |
+| [`design-test-scenarios`](skills/requirements/design-test-scenarios/SKILL.md) | Implementation-independent test scenarios |
+| [`diagram-requirements`](skills/requirements/diagram-requirements/SKILL.md) | Mermaid diagrams, only for real complexity |
+| [`audit-traceability`](skills/requirements/audit-traceability/SKILL.md) | Deterministic ID check, then semantic audit |
+| [`review-readiness`](skills/requirements/review-readiness/SKILL.md) | Quality gates; never PO signoff |
+| [`research`](skills/requirements/research/SKILL.md) | Primary-source research into a cited file |
+
+A user-invoked skill may invoke model-invoked ones, never another user-invoked one; for those it suggests the next step.
+
+## Artifacts
 
 ```text
 artifacts/<product>/
-├── PRODUCT-VISION.md    # Product goals and capabilities
-├── REQUEST.md           # Incoming PO demand
-├── BACKLOG.md           # CAP/EPIC/US relationships
-├── GLOSSARY.md          # Business vocabulary
-├── DECISIONS.md         # Explicit human decisions
-├── US-001.md            # FR, NFR, Gherkin, TC and canonical matrix
-└── diagrams/
+├── PRODUCT-VISION.md     # GOAL-, CAP-
+├── GLOSSARY.md           # business vocabulary
+├── DECISIONS.md          # DEC- (human decisions)
+├── BACKLOG.md            # order, blocked-by, status
+├── OUT-OF-SCOPE.md       # rejected requests
+├── requests/             # incoming items for /triage
+├── specs/SPEC-NNN-*.md
+├── stories/US-NNN.md     # FR, NFR, AC, TC and the canonical matrix
+├── changes/CHG-NNN.md    # change and impact reports
+├── research/  wayfinder/  diagrams/
 ```
 
-[Vision template](templates/PRODUCT-VISION.md) · [Story template](templates/USER-STORY.md) · [Shared vocabulary](docs/VOCABULARY.md) · [Skill activation audit](docs/SKILL-ACTIVATION.md) · [Flow](docs/SKILL-FLOW.md) · [Traceability](docs/TRACEABILITY.md) · [Quality gates](docs/QUALITY-GATES.md) · [Fictional example](examples/vision/PRODUCT-VISION.md)
-
-## Invocation and compatibility
-
-The wording **`Call the Skill tool with "..."` is not portable**. Agent Skills standard discovery relies on YAML `name`/`description`. In Claude Code, users may enter `/skill-name`; Gemini CLI internally discovers and calls `activate_skill` with approval; Codex should be asked in natural language to use an available skill. The package uses platform-specific adapters only where necessary and never invents a universal tool API. See [audit](docs/SKILL-ACTIVATION.md).
+A complete fictional trail, including a change and its impact report: [examples/order-status-portal](examples/order-status-portal/).
 
 ## Principles
 
-Small and composable; evidence before assumptions; human PO signoff; lean Markdown; one authoritative matrix; no forced epics or diagrams; stable IDs; shared vocabulary without conflating domain terms and workflow jargon. Product Vision is revisable and is not a mandatory Scrum artifact.
+Small and composable; evidence before assumptions (Confirmed, Proposed, Pending, Stale); humans approve; one source of truth per meaning; IDs immutable and product-wide; create files lazily; no forced epics or diagrams; mechanical checks over written rules.
 
 ## Validate
 
 ```bash
 python3 scripts/validate_repository.py
 python3 -m unittest discover -s tests -v
+python3 skills/requirements/audit-traceability/scripts/check-ids.py artifacts/<product>   # in your own repo
 ```
 
-Static checks are not a substitute for **live CLI skill-activation tests** or PO review. See [manual evaluations](evaluations/MANUAL-EVALUATIONS.md).
+Static checks are not a substitute for live activation tests in your CLI or for PO review. See [manual evaluations](evaluations/MANUAL-EVALUATIONS.md).
 
-## Distribution
+## Docs
 
-MIT license ([LICENSE](LICENSE)); [contribute](CONTRIBUTING.md); [publishing](PUBLISHING.md). Support for the three agents is based on their documented skill discovery locations; runtime behavior must be tested locally.
-
-[Repository setup templates](templates/setup/requirements-workflow.md) — project settings must be confirmed before writing.
+[Flow](docs/FLOW.md) · [De/Para](docs/DE-PARA.md) · [Invocation](docs/INVOCATION.md) · [Authoring skills](docs/AUTHORING-SKILLS.md) · [Contributing](CONTRIBUTING.md) · [Publishing](PUBLISHING.md) · [Changelog](CHANGELOG.md) · MIT [LICENSE](LICENSE)

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Impact Analysis"
+  short_description: "Analyse the downstream, upstream and sideways impact of a change to a user story, requirement"

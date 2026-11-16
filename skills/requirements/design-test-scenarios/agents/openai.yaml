@@ -1,0 +1,3 @@
+interface:
+  display_name: "Design Test Scenarios"
+  short_description: "Derive implementation-independent test scenarios with setup, action, expected evidence and negative"
