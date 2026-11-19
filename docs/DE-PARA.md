@@ -72,3 +72,21 @@ Removidos: adaptadores duplicados `.claude/skills/*` (substituídos por `scripts
 ## Aviso sobre colisão de nomes
 
 Os nomes `grill-me`, `grilling`, `grill-with-docs`, `wayfinder`, `triage`, `to-spec`, `handoff`, `wait-what`, `to-questionnaire`, `research`, `retro` e `domain-modeling` coincidem de propósito com os de Matt Pocock. Se os dois repositórios estiverem instalados no mesmo agente, mantenha **uma** cópia de cada nome (aqui as versões são supersets para requisitos). Para convivência, use a invocação com namespace do seu agente, ou instale só um conjunto por projeto.
+
+## 4. Integração com o Graphify (v2.1)
+
+| Aspecto | Decisão |
+| --- | --- |
+| Nova skill | `graph-sync` (model-invoked, opcional, ativada no `/setup-requirements-repo`) |
+| Grafo de requisitos | `req-graph.py`: determinístico, sem LLM, sem instalar nada; IDs próprios como nós (sem deriva de IDs) |
+| Regra de direção | Toda aresta aponta para aquilo de que a origem depende. O impacto flui contra a seta, o que o `graphify affected` já faz |
+| Camadas | Requisitos (local), Código (`graphify update`, local) e Conhecimento (`graphify extract`, LLM, só para material não estruturado) |
+| Junção | `graphify merge-graphs`; as camadas ficam independentes e com cache próprio |
+| Não fazer | Injetar nós no `graph.json` do Graphify (o `update` incremental os descarta) |
+| Privacidade | Artefatos estruturados ficam fora do passe LLM (`.graphifyignore`); `GRAPHIFY_BACKEND=none` mantém tudo local |
+| Skills que usam o grafo | `impact-analysis`, `refine-request`, `ask-req`, `audit-traceability`, `triage`, `retro` |
+| Screens e Fields | Tópico opcional `## Screens` (decidido por história conforme a política `ask`, `always` ou `never`), IDs `FLD-` e `SCR-`, relação `uses` no grafo |
+| Versionamento | Seção G do `setup-requirements-repo`: git local ou remoto, layout, ramificação e revisão, convenção de commit, o que versionar, e nenhuma ação git sem pedido |
+| Consultas | `req-graph.py query`, `path` e `explain` cobrem o que antes só o `graphify query/path/explain` fazia sobre o grafo de requisitos. O Graphify fica restrito às camadas de código e de documentos; busca semântica (sinônimos) continua sendo dele |
+| Visualização | `req-graph.py build --view` gera `graph/req-graph.html`: arquivo único, offline, sem Graphify. Layout em camadas, clique mostra impactados (laranja) e dependências (azul), status na borda, busca e filtros. O HTML do Graphify (`graphify export html`) continua disponível como visão separada do grafo mesclado |
+| Sem o grafo | Todas as skills continuam funcionando (fallback para `check-ids.py` e leitura dos arquivos) |

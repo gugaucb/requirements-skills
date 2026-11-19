@@ -31,7 +31,7 @@ Three buckets, oldest first: unlabeled; `needs-triage`; `needs-info` with new ac
 
 ## Triage one item
 
-1. **Gather context.** Read the item and its comments, prior triage notes (do not re-ask resolved questions), the vision, glossary, decisions and backlog. Run two checks: **redundancy** (does a story, CAP or DEC already cover it? Report where you looked) and **prior rejection** (read `OUT-OF-SCOPE.md`).
+1. **Gather context.** Read the item and its comments, prior triage notes (do not re-ask resolved questions), the vision, glossary, decisions and backlog. Run two checks: **redundancy** (does a story, CAP or DEC already cover it? Report where you looked; with the graph enabled, invoke `graph-sync` and run `req-graph.py query <artifact-root> "<request>"` instead of grepping; add the merged Graphify graph only for code or document coverage) and **prior rejection** (read `OUT-OF-SCOPE.md`).
 2. **Classify and recommend.** State category and state with reasoning. For a `change`, invoke the `impact-analysis` skill and attach the report; a scope-changing change goes to `ready-for-po`. Wait for direction.
 3. **Grill if needed.** Invoke the `grilling` skill and the `domain-modeling` skill and sharpen the item a round at a time.
 4. **Apply the outcome:**

@@ -17,6 +17,8 @@ Read `docs/agents/requirements-workflow.md`, `GLOSSARY.md`, `DECISIONS.md`. If t
 5. **Set status** `Draft` or `Ready for human review`. Approval is recorded as a DEC by the PO.
 6. **Revising?** Invoke `impact-analysis` first. Keep IDs, mark retired capabilities `Superseded`, record the revision and the CHG in the change history.
 
+If `docs/agents/graph.md` exists, invoke the `graph-sync` skill after writing.
+
 ## Done
 
 Every goal and capability has an ID, an origin and a status; open questions are DEC rows with an owner; nothing Confirmed lacks PO evidence.

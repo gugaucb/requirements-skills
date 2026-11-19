@@ -31,8 +31,8 @@ def check():
     S = skills()
     manual = {n for n, (_, _, fm) in S.items() if fm.get("disable-model-invocation") == "true"}
     model = set(S) - manual
-    if len(S) != 26:
-        p.append(f"Expected 26 skills, found {len(S)}")
+    if len(S) != 27:
+        p.append(f"Expected 27 skills, found {len(S)}")
     for n, (f, t, fm) in S.items():
         if fm.get("name") != n:
             p.append(f"{n}: frontmatter name mismatch")
@@ -90,7 +90,10 @@ def check():
                     continue
                 if not (f.parent / t.split("#")[0]).exists():
                     p.append(f"broken link {f.relative_to(R)} -> {t}")
-    for d in ("docs/FLOW.md", "docs/DE-PARA.md", "docs/INVOCATION.md", "docs/AUTHORING-SKILLS.md"):
+    for d in ("skills/requirements/graph-sync/GRAPH.md", "skills/requirements/graph-sync/scripts/req-graph.py",
+              "skills/requirements/setup-requirements-repo/graph.md", "skills/requirements/setup-requirements-repo/versioning.md",
+              "skills/requirements/write-user-story/SCREEN-FORMAT.md",
+              "skills/requirements/setup-requirements-repo/graphifyignore.template", "docs/FLOW.md", "docs/DE-PARA.md", "docs/INVOCATION.md", "docs/AUTHORING-SKILLS.md"):
         if not (R / d).exists():
             p.append(f"missing {d}")
     return p

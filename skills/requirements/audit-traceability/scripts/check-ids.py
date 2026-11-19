@@ -6,7 +6,7 @@ Usage: check-ids.py <artifact-root> [--json]
 Where each ID type may be DEFINED (anywhere else it is only a reference):
   PRODUCT-VISION.md: GOAL, CAP      DECISIONS.md: DEC      BACKLOG.md: US, EPIC
   specs/SPEC-*.md: SPEC             changes/CHG-*.md: CHG
-  stories/US-*.md (or US-*.md): US, FR, NFR, AC, TC, DG
+  stories/US-*.md (or US-*.md): US, FR, NFR, AC, TC, DG, FLD, SCR
 Exit code 1 when problems are found.
 """
 import json
@@ -15,7 +15,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-PREFIXES = ("GOAL", "CAP", "EPIC", "SPEC", "US", "FR", "NFR", "AC", "TC", "DG", "DEC", "CHG")
+PREFIXES = ("GOAL", "CAP", "EPIC", "SPEC", "US", "FR", "NFR", "AC", "TC", "DG", "FLD", "SCR", "DEC", "CHG")
 P = "|".join(PREFIXES)
 ID = re.compile(rf"\b(?:{P})-\d{{3,}}\b")
 DEF_LINE = re.compile(rf"^(?:\|\s*(?:\*\*)?|#{{1,3}}\s+|\*\*)((?:{P})-\d{{3,}})\b")
@@ -35,7 +35,7 @@ def may_define(path: Path, prefix: str) -> bool:
     if n.startswith("CHG-"):
         return prefix == "CHG"
     if n.startswith("US-"):
-        return prefix in ("US", "FR", "NFR", "AC", "TC", "DG")
+        return prefix in ("US", "FR", "NFR", "AC", "TC", "DG", "FLD", "SCR")
     return False
 
 

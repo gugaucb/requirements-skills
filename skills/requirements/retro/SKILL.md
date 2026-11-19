@@ -14,6 +14,7 @@ Look for candidates, most severe first:
 - **Mechanical errors**: duplicate or dangling IDs, uncovered FR/AC. Fix with a deterministic check (extend `check-ids.py`) before writing a rule.
 - **Readiness rules**: quality gates too loose or too tight; a Definition of Ready worth tightening.
 - **Navigation**: how long it took to find the right artifact; whether a pointer in `AGENTS.md` or the `## Agent skills` block would help.
+- **Graph signals** (when enabled): isolated nodes, CAPs with no stories, DEC hubs, unresolved IDs that keep recurring.
 - **Skill gaps**: a handoff that nobody suggested, or a flow step with no skill.
 
 Present the candidates to the user in order of severity. Judgement calls go to quality gates or the workflow doc; mechanical ones go to checks.

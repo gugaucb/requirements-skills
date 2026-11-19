@@ -1,0 +1,3 @@
+interface:
+  display_name: "Graph Sync"
+  short_description: "Rebuild and query the requirements knowledge graph (typed links between GOAL, CAP, SPEC, US, FR"

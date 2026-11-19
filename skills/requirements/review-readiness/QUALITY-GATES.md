@@ -12,6 +12,7 @@
 | G6 Consistency | Diagrams, text, glossary terms agree; no duplicate or dangling IDs |
 | G7 Freshness | No `Stale` upstream; open CHG items for this story are resolved |
 | G8 Decisions | Every rule traces to a DEC; Pending decisions are listed with owner |
+| G10 Screens | Screens decision recorded: screens specified, `No screens: <reason>`, never left `Pending`; screen fields exist in Fields; ACs do not duplicate the form |
 | G9 Human | Approval recorded before Ready (team agreement) |
 
 ## Vision gates

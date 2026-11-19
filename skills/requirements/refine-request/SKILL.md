@@ -7,7 +7,7 @@ argument-hint: "US-NNN or the request"
 
 Refine **one** story (an `US-NNN` from `BACKLOG.md`, or a small request that fits one story) from "As a / I want" to Ready for human review. Decide what is needed; never run skills mechanically.
 
-Read `docs/agents/requirements-workflow.md`, `GLOSSARY.md`, `DECISIONS.md`, the vision, and the story's linked `GOAL`/`CAP`/spec.
+Read `docs/agents/requirements-workflow.md`, `GLOSSARY.md`, `DECISIONS.md`, the vision, and the story's linked `GOAL`/`CAP`/spec. With the graph enabled (`docs/agents/graph.md`), load context narrowly instead: `req-graph.py affected <artifact-root> US-NNN --up` lists exactly the goals, capabilities, spec and decisions this story depends on; read only those sections. Fresh context per story stays cheap.
 
 ## Process
 
@@ -21,7 +21,7 @@ Read `docs/agents/requirements-workflow.md`, `GLOSSARY.md`, `DECISIONS.md`, the 
    3. `define-acceptance-criteria`
    4. `design-test-scenarios`
    5. `diagram-requirements` (only for real branching or states)
-6. **Verify.** Invoke `audit-traceability`, then `review-readiness`.
+6. **Verify.** Invoke `audit-traceability`, then `review-readiness`. If the graph is enabled, invoke `graph-sync` afterwards.
 7. **Deliver** actionable partial drafts with explicit blockers rather than waiting for perfection.
 
 If you refined a `Stale` story, append a line to its change history and to the CHG resolution log.

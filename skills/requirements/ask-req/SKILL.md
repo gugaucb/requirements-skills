@@ -32,6 +32,8 @@ Do not ask the user what they already have. Look at the artifact root (see `docs
 
 Report what you found in two lines, then recommend one next step.
 
+If `docs/agents/graph.md` exists, ask the graph instead of scanning files: invoke the `graph-sync` skill, then `req-graph.py frontier <artifact-root>` (stories ready to refine) and `req-graph.py stale <artifact-root>` (stories to re-refine). Without a graph, read `BACKLOG.md` and the story statuses.
+
 ## The main flow: idea to ready requirements
 
 1. **`/setup-requirements-repo`** once per repo.
@@ -75,6 +77,10 @@ When a story, capability, goal, decision or glossary term **changes**, the cost 
 
 - The **`domain-modeling`** skill sharpens business language: challenges a fuzzy term, resolves an overloaded word, records decisions in `DECISIONS.md`. It is the active discipline `/grill-with-docs` drives.
 - `docs/agents/requirements-vocabulary.md` is the shared **process** vocabulary (IDs, statuses). Business terms live in `GLOSSARY.md`; do not mix them.
+
+## Graph
+
+The `graph-sync` skill keeps a deterministic graph of every ID and link (`serves`, `part_of`, `decided_by`, `blocked_by`, `verifies`, `proves`) and answers "what depends on X" without reading every file. Optional; enabled in `/setup-requirements-repo`; merges with a Graphify code or knowledge graph.
 
 ## Checks
 

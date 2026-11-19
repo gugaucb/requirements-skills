@@ -30,3 +30,4 @@ Reachable only when you type them (`disable-model-invocation: true`).
 - **[audit-traceability](./audit-traceability/SKILL.md)**: Deterministic ID check plus semantic audit.
 - **[review-readiness](./review-readiness/SKILL.md)**: Quality gates; never PO signoff.
 - **[research](./research/SKILL.md)**: Primary-source research into a cited file.
+- **[graph-sync](./graph-sync/SKILL.md)**: Optional typed graph of all IDs; merges with Graphify.

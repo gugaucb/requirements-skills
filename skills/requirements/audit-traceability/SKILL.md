@@ -14,10 +14,11 @@ Read [TRACEABILITY.md](TRACEABILITY.md) for the model.
    ```
 
    It reports duplicate definitions, dangling references, FR/NFR without AC, AC without TC, stories with no matrix, and items marked `Stale`. If Python is unavailable, do the same by reading each story matrix.
-2. **Judge what the script cannot.** Token overlap is not meaning. For each link, ask whether the AC really proves the FR and the CAP really justifies the story. Flag false semantic links.
-3. **Check both directions:** `GOAL→CAP→EPIC (optional)→US→FR/NFR→AC→TC` and back. A CAP may link straight to a story; do not force an epic.
-4. **Check change closure.** Every `CHG-NNN` has its Needs review items resolved or consciously accepted; no item stays `Stale` without an open CHG.
-5. **Report** actual unique-ID counts, gaps, and the scope-change impact of anything open. Keep each story matrix normative and vision/backlog links as the higher-level path.
+2. **Graph checks** (when `docs/agents/graph.md` exists; invoke `graph-sync`): the build lists unresolved IDs; also look for a CAP with no story (nothing `part_of`/`serves` it), a story with no `serves`, and a DEC that most items hang on (many `decided_by` edges), which makes it a risk worth re-confirming.
+3. **Judge what the script cannot.** Token overlap is not meaning. For each link, ask whether the AC really proves the FR and the CAP really justifies the story. Flag false semantic links.
+4. **Check both directions:** `GOAL→CAP→EPIC (optional)→US→FR/NFR→AC→TC` and back. A CAP may link straight to a story; do not force an epic.
+5. **Check change closure.** Every `CHG-NNN` has its Needs review items resolved or consciously accepted; no item stays `Stale` without an open CHG.
+6. **Report** actual unique-ID counts, gaps, and the scope-change impact of anything open. Keep each story matrix normative and vision/backlog links as the higher-level path.
 
 ## Done
 

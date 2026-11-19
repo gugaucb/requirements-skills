@@ -28,6 +28,17 @@ class RepositoryContract(unittest.TestCase):
     def test_change_mode_documented(self):
         self.assertIn("impact round", (ROOT / "skills/productivity/grilling/SKILL.md").read_text())
 
+    def test_screens_and_versioning_are_wired(self):
+        tpl = (ROOT / "skills/requirements/write-user-story/USER-STORY-TEMPLATE.md").read_text()
+        self.assertIn("## Fields", tpl)
+        self.assertIn("## Screens", tpl)
+        self.assertLess(tpl.index("## Fields"), tpl.index("## Screens"))
+        self.assertIn("Decide Screens", (ROOT / "skills/requirements/write-user-story/SKILL.md").read_text())
+        setup = (ROOT / "skills/requirements/setup-requirements-repo/SKILL.md").read_text()
+        for needle in ("**G. Versioning.**", "git local", "git remote", "Screens policy"):
+            self.assertIn(needle, setup)
+        self.assertIn("Screens policy", (ROOT / "skills/requirements/setup-requirements-repo/requirements-workflow.md").read_text())
+
     def test_adapters_in_sync(self):
         r = subprocess.run([sys.executable, str(ROOT / "scripts/sync_adapters.py"), "--check"])
         self.assertEqual(0, r.returncode)

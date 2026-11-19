@@ -1,4 +1,4 @@
-# Requirements Skills v2.0.0
+# Requirements Skills v2.4.0
 
 Small, composable, **harness-neutral** agent skills for **eliciting and documenting requirements**. They turn a Product Owner's vision into goals and capabilities, then into specs, thin vertical user stories, requirements, Gherkin, test scenarios, Mermaid diagrams and a traceability matrix. **They never generate application code.**
 
@@ -12,43 +12,7 @@ Requirements fail in three ways, and each has a skill:
 2. **We changed something and broke something else.** Any change to an existing story runs an **impact round** (`impact-analysis`): downstream, upstream and sideways items are classified and the affected ones become `Stale` until re-refined.
 3. **We lost the thread.** Every skill ends with a **next step**, and `/ask-req` reads your artifacts to say where you are.
 
-## Installation (30-second setup)
-
-Install via [skills.sh](https://skills.sh) (universal across agents), the Gemini CLI, or clone locally using the install script.
-
-### 1. Get the skills
-
-<details open>
-<summary><strong>Any agent via skills.sh</strong> (Cursor, Claude Code, Codex, Windsurf, OpenCode, Devin...)</summary>
-
-```bash
-npx skills@latest add gugaucb/requirements-skills -a <agent>  # cursor, claude-code, codex, windsurf, opencode, devin...
-```
-
-To let the installer prompt you for your agent, omit `-a`. When asked which skills to take, select all or choose the ones you need (make sure to include `setup-requirements-repo` and `ask-req`).
-
-To update later:
-
-```bash
-npx skills@latest update
-```
-
-</details>
-
-<details>
-<summary><strong>Gemini CLI</strong></summary>
-
-```bash
-gemini skills install https://github.com/gugaucb/requirements-skills.git --path skills/requirements
-gemini skills install https://github.com/gugaucb/requirements-skills.git --path skills/productivity
-```
-
-Re-run both commands to update.
-
-</details>
-
-<details>
-<summary><strong>Local clone and symlink</strong> (scripts/install.sh)</summary>
+## Install
 
 ```bash
 git clone https://github.com/gugaucb/requirements-skills
@@ -57,21 +21,7 @@ scripts/install.sh /path/to/your/repo/.agents/skills     # Codex, Gemini CLI and
 scripts/install.sh /path/to/your/repo/.claude/skills     # Claude Code
 ```
 
-Symlinks by default (a `git pull` updates them); pass `--copy` to copy files instead.
-
-</details>
-
-### 2. Run `/setup-requirements-repo`
-
-In your agent inside your target repo, run **`/setup-requirements-repo`** once. It sets up:
-- The artifact directory root (e.g. `artifacts/<product>/`)
-- The output language for requirements
-- Your issue tracker integration (GitHub, GitLab, or local files)
-- Triage roles and labels
-
-### 3. Ask `/ask-req` anytime
-
-New to the repo or unsure what skill to run next? Run **`/ask-req`**. It reads the current artifact state and guides you to the right next step. Detailed invocation guides per harness: [docs/INVOCATION.md](docs/INVOCATION.md).
+Symlinks by default (a `git pull` updates them); add `--copy` to copy. Then, in your repo, run **`/setup-requirements-repo`** once (artifact root, output language, tracker, triage roles). New here? Run **`/ask-req`**. Invocation details per harness: [docs/INVOCATION.md](docs/INVOCATION.md).
 
 ## The flow
 
@@ -99,6 +49,9 @@ flowchart TD
   CHANGE["change to an existing<br/>story, capability or term"] --> GRILL
   GRILL -- "change mode" --> IMPACT["impact-analysis<br/>CHG-NNN, items Stale"]
   IMPACT --> REFINE
+  IMPACT -.-> GS["graph-sync<br/>optional graph of all IDs"]
+  REFINE -.-> GS
+  GS -.-> ASK
 ```
 
 More diagrams (on-ramps, change flow, status machine): [docs/FLOW.md](docs/FLOW.md). The diagram is a routing model, not a pipeline: a small, fully specified request skips most of it.
@@ -111,7 +64,7 @@ More diagrams (on-ramps, change flow, status machine): [docs/FLOW.md](docs/FLOW.
 
 `/grill-with-docs` on the change. Its last round is the **impact report**: which FR, AC, TC, sibling stories, glossary terms and decisions are touched, each marked Invalidated, Needs review or Unaffected (checked). The report is saved as `changes/CHG-NNN.md`, impacted items become `Stale`, and `/refine-request` clears them one by one. `Stale` blocks readiness.
 
-## Skill catalog (26)
+## Skill catalog (27)
 
 **User-invoked** (reachable only when you type them; they orchestrate):
 
@@ -148,8 +101,26 @@ More diagrams (on-ramps, change flow, status machine): [docs/FLOW.md](docs/FLOW.
 | [`audit-traceability`](skills/requirements/audit-traceability/SKILL.md) | Deterministic ID check, then semantic audit |
 | [`review-readiness`](skills/requirements/review-readiness/SKILL.md) | Quality gates; never PO signoff |
 | [`research`](skills/requirements/research/SKILL.md) | Primary-source research into a cited file |
+| [`graph-sync`](skills/requirements/graph-sync/SKILL.md) | Optional knowledge graph of every ID and link; merges with Graphify |
 
 A user-invoked skill may invoke model-invoked ones, never another user-invoked one; for those it suggests the next step.
+
+## Knowledge graph (optional, v2.1)
+
+`graph-sync` turns the artifacts into a typed graph (`serves`, `part_of`, `decided_by`, `blocked_by`, `verifies`, `proves`) with a deterministic script: no LLM, no extra install, milliseconds, skipped when nothing changed. One rule keeps it simple: **an edge points at what its source depends on**, so impact flows against the arrow. That is what `graphify affected` already does, so the graph merges with [Graphify](https://github.com/Graphify-Labs/graphify) code and knowledge layers (`graphify merge-graphs`) and answers questions like "what breaks if DEC-003 changes" in one call.
+
+```bash
+python3 skills/requirements/graph-sync/scripts/req-graph.py build    artifacts/<product> --view   # JSON + interactive HTML
+python3 skills/requirements/graph-sync/scripts/req-graph.py affected artifacts/<product> DEC-003 --no-weak
+python3 skills/requirements/graph-sync/scripts/req-graph.py frontier artifacts/<product>
+python3 skills/requirements/graph-sync/scripts/req-graph.py query    artifacts/<product> "fraud review" --type US,FR
+python3 skills/requirements/graph-sync/scripts/req-graph.py path     artifacts/<product> TC-003 GOAL-001
+python3 skills/requirements/graph-sync/scripts/req-graph.py explain  artifacts/<product> FR-003
+```
+
+`graph/req-graph.html` is a self-contained, offline viewer (layered layout, click a node to see what it impacts and what it depends on, status on the border, search and filters). It is regenerated with the graph and needs no Graphify.
+
+Used by `impact-analysis` (dependents in one call), `refine-request` (loads only the upstream sections), `/ask-req` (frontier and Stale from the graph), `audit-traceability` and `/triage`. Enable it in `/setup-requirements-repo`. Details, relation table and Graphify recipes: [GRAPH.md](skills/requirements/graph-sync/GRAPH.md). Not affiliated with Graphify Labs.
 
 ## Artifacts
 
@@ -165,6 +136,7 @@ artifacts/<product>/
 ├── stories/US-NNN.md     # FR, NFR, AC, TC and the canonical matrix
 ├── changes/CHG-NNN.md    # change and impact reports
 ├── research/  wayfinder/  diagrams/
+└── graph/req-graph.json, req-graph.html  # derived, optional
 ```
 
 A complete fictional trail, including a change and its impact report: [examples/order-status-portal](examples/order-status-portal/).

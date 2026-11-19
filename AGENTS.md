@@ -6,6 +6,7 @@ This repo ships agent skills for eliciting and documenting requirements. It neve
 
 - `skills/requirements/` the requirements flow. `skills/productivity/` general tools (`grilling`, `grill-me`, `handoff`, `wait-what`, `to-questionnaire`). `skills/deprecated/` renamed v1 skills (pointer only).
 - Each skill is `skills/<bucket>/<name>/SKILL.md`, owns its reference files, and has a generated `agents/openai.yaml` (Codex UI metadata; run `python3 scripts/sync_adapters.py`).
+- Optional knowledge graph: `skills/requirements/graph-sync/` (deterministic `req-graph.py`, merges with Graphify). Skills must work without it.
 - `docs/` repo-level docs. `examples/` a fictional product with a full trail. `evaluations/` manual behaviour cases.
 
 ## Invocation: two kinds of skill

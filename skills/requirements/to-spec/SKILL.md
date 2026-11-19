@@ -55,6 +55,8 @@ Pending decisions with owner and the IDs they block.
 
 </spec-template>
 
+If `docs/agents/graph.md` exists, invoke the `graph-sync` skill after writing.
+
 ## Done
 
 The file exists, every rule has a source and a status, and every open question has an owner.

@@ -81,3 +81,22 @@ stateDiagram-v2
 ```
 
 Gates: no automatic approval; a scope-changing request goes to the PO as a DEC and is traced to a vision revision; `Stale` blocks readiness.
+
+## Graph overlay (optional)
+
+```mermaid
+flowchart LR
+  MD["Markdown artifacts<br/>source of truth"] --> RG["req-graph.py build<br/>deterministic, no LLM"]
+  RG --> RJ[("graph/req-graph.json")]
+  CODE["product code"] -.-> GU["graphify update<br/>tree-sitter, local"]
+  DOCS["research, regulations, PDFs"] -.-> GE["graphify extract<br/>LLM, unstructured only"]
+  GU --> MG["graphify merge-graphs"]
+  GE --> MG
+  RJ --> MG
+  RJ --> Q1["impact-analysis<br/>req-graph.py affected"]
+  MG --> Q2["graphify affected, query, path"]
+  RJ --> Q3["ask-req<br/>frontier and stale"]
+  RG --> VW["req-graph.html<br/>offline viewer"]
+```
+
+Rule: every edge points at what its source depends on, so `graphify affected X` returns everything impacted by X. Rebuild with the `graph-sync` skill after any skill that writes artifacts.

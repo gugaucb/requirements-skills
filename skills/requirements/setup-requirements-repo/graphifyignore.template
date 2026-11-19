@@ -1,0 +1,10 @@
+# Structured requirements artifacts are indexed deterministically by req-graph.py.
+# Keep them out of Graphify's LLM pass: no token cost, no ID drift, no confidential text leaving the machine.
+stories/
+specs/
+changes/
+graph/
+PRODUCT-VISION.md
+BACKLOG.md
+DECISIONS.md
+GLOSSARY.md

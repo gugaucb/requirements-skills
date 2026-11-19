@@ -11,7 +11,7 @@ Read `docs/agents/requirements-workflow.md` for the artifact root, then the trac
 
 1. **State the change.** Which IDs, from what to what, why, who asked, status (Proposed or Confirmed). Classify it: `rule`, `scope`, `actor`, `metric`, `term`, `priority`, `removal`. Done when each changed ID has a one-line before and after.
 
-2. **Walk downward.** For every changed ID list what hangs under it: `US → FR/NFR → AC → TC`, diagrams (DG), and `BACKLOG.md` rows. Run `python3 <skill-dir>/../audit-traceability/scripts/check-ids.py <artifact-root>` when Python is available to get the link graph; otherwise read the story matrices.
+2. **Walk downward.** For every changed ID list what hangs under it: `US → FR/NFR → AC → TC`, diagrams (DG), and `BACKLOG.md` rows. **Graph first:** when `docs/agents/graph.md` exists, invoke the `graph-sync` skill, then run `python3 <skill-dir>/../graph-sync/scripts/req-graph.py affected <artifact-root> <ID> --no-weak`. It lists dependents and sideways candidates in one call (`--up` gives the upstream walk of step 3). Without a graph, run `check-ids.py` from `audit-traceability` or read the story matrices. The list is a set of candidates; you still classify each one.
 
 3. **Walk upward.** Does the change still serve its `CAP` and `GOAL`? Does it contradict `PRODUCT-VISION.md` scope or an approved `DEC`? A change that moves a boundary is **scope-changing**: stop and put it to the PO as a pending decision before anything else.
 
@@ -24,7 +24,7 @@ Read `docs/agents/requirements-workflow.md` for the artifact root, then the trac
 
 6. **Write the report** with [CHANGE-IMPACT-FORMAT.md](CHANGE-IMPACT-FORMAT.md) to `<artifact-root>/changes/CHG-NNN.md` (stateful callers) or present it in chat (stateless callers). Done when every touched ID is classified and the report names the PO decisions it needs.
 
-7. **Mark, do not rewrite.** For stateful callers, set impacted downstream items to status `Stale` and add one line to their change history pointing at the CHG file. Do not edit downstream content without the user's go-ahead. Keep IDs; a retired item is marked `Superseded by <ID>` or `Retired`, never deleted or renumbered.
+7. **Mark, do not rewrite.** For stateful callers, set impacted downstream items to status `Stale` and add one line to their change history pointing at the CHG file. Do not edit downstream content without the user's go-ahead. Then, if the graph is enabled, invoke `graph-sync` so the `Stale` statuses and the new CHG are in it. Keep IDs; a retired item is marked `Superseded by <ID>` or `Retired`, never deleted or renumbered.
 
 ## Rules
 
@@ -40,3 +40,4 @@ End with `➡️ **Next step:** ...`.
 - Impacted stories exist: tell the user to run `/refine-request` on each, in dependency order.
 - Vision or capability touched: invoke `review-product-vision` and, after approval, update `PRODUCT-VISION.md` through `/create-product-vision`.
 - Everything re-refined: invoke `audit-traceability`, then `review-readiness`.
+- Graph enabled: `/ask-req` reads the Stale frontier from it.

@@ -12,6 +12,8 @@ Shared **process** vocabulary. A product's own business terms live in its `GLOSS
 | User Story (`US-`) | Thin vertical slice of value, As a / I want / So that | A task list |
 | Functional Requirement (`FR-`) | Observable behavior under conditions | An implementation instruction |
 | Non-functional Requirement (`NFR-`) | Measurable quality constraint with verification | A vague adjective |
+| Field (`FLD-`) | One data field of a story: name, type, size, required, rules | A screen control |
+| Screen (`SCR-`) | Behavior of one user interface: field groups, actions, states | Visual design |
 | Acceptance Criterion (`AC-`) | Verifiable business acceptance as a Gherkin scenario | A test case |
 | Test Case (`TC-`) | Setup, action and evidence proving an AC | The AC itself |
 | Diagram (`DG-`) | Visual clarification of confirmed behavior | A source of new rules |

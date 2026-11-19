@@ -11,6 +11,32 @@
 
 **Out of scope:** [Explicit exclusions.]
 
+## Fields
+
+| ID | NAME | Description | Required | Type | Size | Rules |
+| --- | --- | --- | --- | --- | --- | --- |
+| FLD-XXX | [field name] | [what it holds] | [Yes/No] | [String, Number, Date, Enum...] | [max length or range] | [validation, format, DEC or FR IDs] |
+
+## Screens
+
+> Optional, decided per story (see `write-user-story`). Describe behavior, not visual design. Write `No screens: <reason>` for a story without a user interface, or `Pending: <question>` while undecided.
+
+### SCR-XXX: [Screen name]
+
+**Actor:** [role] | **Entry:** [how the user gets here]
+
+| Order | Group | Field | Label | Control | Mask / format | Editable | Visible when | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | [group] | FLD-XXX | [label shown] | [text, select, date, file...] | [mask] | [Yes/No] | [always / condition] | [help text] |
+
+| Action | Label | Enabled when | Result |
+| --- | --- | --- | --- |
+| [Submit] | [button text] | [all required fields valid] | [FR-XXX, AC-XXX] |
+
+| State | Condition | Behavior and message |
+| --- | --- | --- |
+| [Empty / Error / Success / Loading] | [when it shows] | [what the user sees] |
+
 ## Functional requirements
 
 | ID | Behavior | Source / status |

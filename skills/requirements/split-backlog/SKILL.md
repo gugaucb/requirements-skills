@@ -45,6 +45,8 @@ Write rows to `BACKLOG.md` (format in [BACKLOG-FORMAT.md](BACKLOG-FORMAT.md)), a
 
 Publish to the tracker only when the user explicitly asks and the tracker doc allows it: one issue per story in dependency order (blockers first), native blocking links where the tracker has them, label `ready-for-refinement`. Never close or edit a parent issue.
 
+If `docs/agents/graph.md` exists, invoke the `graph-sync` skill afterwards so the `blocked_by` frontier is queryable.
+
 ## Done
 
 Every candidate story is in `BACKLOG.md` with serves-links, blockers and a Proposed order, and the user approved the breakdown.
