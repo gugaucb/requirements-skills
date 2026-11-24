@@ -1,0 +1,22 @@
+schema: requirements-skills/agent-manifest/1
+name: "review-spec"
+description: "Phase 5 review. Check that the artifacts changed as the approved spec planned, nothing else changed, nothing stays Stale, and the touched stories pass the quality gates."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "<artifact-root>/03-specs/SPEC-NNN-slug.md with a Plan of changes"
+  - "<artifact-root>/05-changes/CHG-NNN.md"
+  - "<artifact-root>/02-backlog/BACKLOG.md"
+contract:
+  reads: "`03-specs/SPEC-NNN`, `05-changes/CHG-NNN`, the touched artifacts, the graph."
+  writes: "the `## Review` section of the spec; nothing else."
+  gate: "the PO signs; the spec status then moves to `Applied`, backed by a DEC."
+scripts: []
+next_steps:
+  - "grill-with-docs"
+  - "retro"
+  - "ask-req"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "review-spec"
+  description: "Phase 5 review. Check that the artifacts changed as the approved spec planned, nothing else changed, nothing stays Stale, and the touched stories pass the quality gates."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "SPEC-NNN"}}}

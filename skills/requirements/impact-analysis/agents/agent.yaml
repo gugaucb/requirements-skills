@@ -1,0 +1,22 @@
+schema: requirements-skills/agent-manifest/1
+name: "impact-analysis"
+description: "Analyse the downstream, upstream and sideways impact of a change to a user story, requirement, acceptance criterion, capability, goal, decision or glossary term. Use before editing any artifact that already has IDs, when a story is altered, when a rule or term is redefined, or when a grilling session is in change mode."
+invocation: model   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+  - "the artifact being changed (an ID that exists under the artifact root)"
+contract: {}
+scripts: []
+next_steps:
+  - "grill-with-docs"
+  - "refine-request"
+  - "review-product-vision"
+  - "create-product-vision"
+  - "audit-traceability"
+  - "review-readiness"
+  - "ask-req"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "impact-analysis"
+  description: "Analyse the downstream, upstream and sideways impact of a change to a user story, requirement, acceptance criterion, capability, goal, decision or glossary term. Use before editing any artifact that already has IDs, when a story is altered, when a rule or term is redefined, or when a grilling session is in change mode."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

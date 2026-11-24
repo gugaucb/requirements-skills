@@ -6,7 +6,7 @@ GOAL -> CAP -> EPIC (optional) -> US -> FR / NFR -> AC -> TC
 
 `FLD` (field) and `SCR` (screen) belong to a US; a SCR `uses` FLD, so changing a field impacts its screens. `DG` (diagram) may support a US, FR or AC. `DEC` may justify any node. `SPEC` groups candidate stories for a feature. `CHG` records a change and its impact.
 
-- Higher-level relations live in `PRODUCT-VISION.md`, `specs/` and `BACKLOG.md`.
+- Higher-level relations live in `PRODUCT-VISION.md`, `03-specs/` and `BACKLOG.md`.
 - The lower-level **authoritative matrix** lives in each `US-NNN.md` (section "Canonical traceability"). One source of truth: do not duplicate it elsewhere.
 - IDs are unique and immutable **product-wide** (FR-004 exists once, not once per story). Allocate the next free number. Retired items keep their ID.
 - A CAP may link straight to stories without an epic.

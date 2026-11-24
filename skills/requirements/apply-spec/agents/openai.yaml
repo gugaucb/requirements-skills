@@ -1,0 +1,5 @@
+interface:
+  display_name: "Apply Spec"
+  short_description: "Apply an approved spec's plan of changes to the artifacts, one line at a time in dependency order"
+policy:
+  allow_implicit_invocation: false

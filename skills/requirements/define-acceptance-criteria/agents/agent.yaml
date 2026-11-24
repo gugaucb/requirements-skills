@@ -1,0 +1,17 @@
+schema: requirements-skills/agent-manifest/1
+name: "define-acceptance-criteria"
+description: "Write externally observable acceptance criteria in Gherkin Given / When / Then using the configured locale. Use for defining acceptance of story requirements."
+invocation: model   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+  - "<artifact-root>/04-stories/US-NNN.md with FR and NFR rows"
+contract: {}
+scripts: []
+next_steps:
+  - "design-test-scenarios"
+  - "grilling"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "define-acceptance-criteria"
+  description: "Write externally observable acceptance criteria in Gherkin Given / When / Then using the configured locale. Use for defining acceptance of story requirements."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

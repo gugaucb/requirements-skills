@@ -1,0 +1,19 @@
+schema: requirements-skills/agent-manifest/1
+name: "req-graph"
+description: "Ask the requirements graph in plain words: rebuild it, open the viewer, find what depends on an item, search, trace how two items connect, see the backlog progress or a spec's plan."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "an artifact root with at least one artifact"
+contract: {}
+scripts: []
+next_steps:
+  - "refine-request"
+  - "apply-spec"
+  - "review-spec"
+  - "audit-traceability"
+  - "ask-req"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "req-graph"
+  description: "Ask the requirements graph in plain words: rebuild it, open the viewer, find what depends on an item, search, trace how two items connect, see the backlog progress or a spec's plan."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "e.g. what depends on DEC-003 | open | frontier | plan SPEC-001"}}}

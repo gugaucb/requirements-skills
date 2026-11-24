@@ -1,0 +1,21 @@
+schema: requirements-skills/agent-manifest/1
+name: "graph-sync"
+description: "Rebuild and query the requirements knowledge graph (typed links between GOAL, CAP, SPEC, US, FR, NFR, AC, TC, DEC and CHG). Use when docs/agents/graph.md exists and artifacts changed, or when you need the dependents, dependencies or frontier of an ID without reading every file."
+invocation: model   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/graph.md with the graph enabled"
+  - "an artifact root with at least one artifact"
+contract: {}
+scripts:
+  - "scripts/req-graph.py"
+  - "scripts/reqmd.py"
+  - "scripts/viewer.html.tpl"
+next_steps:
+  - "audit-traceability"
+  - "impact-analysis"
+  - "ask-req"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "graph-sync"
+  description: "Rebuild and query the requirements knowledge graph (typed links between GOAL, CAP, SPEC, US, FR, NFR, AC, TC, DEC and CHG). Use when docs/agents/graph.md exists and artifacts changed, or when you need the dependents, dependencies or frontier of an ID without reading every file."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

@@ -1,0 +1,17 @@
+schema: requirements-skills/agent-manifest/1
+name: "to-questionnaire"
+description: "Turn a decision you cannot answer alone into a questionnaire for a stakeholder to fill in."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  []
+contract: {}
+scripts: []
+next_steps:
+  - "grill-with-docs"
+  - "spec-req"
+  - "wayfinder"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "to-questionnaire"
+  description: "Turn a decision you cannot answer alone into a questionnaire for a stakeholder to fill in."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

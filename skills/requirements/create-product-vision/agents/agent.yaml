@@ -1,0 +1,21 @@
+schema: requirements-skills/agent-manifest/1
+name: "create-product-vision"
+description: "Turn a Product Owner narrative, idea, brief or existing vision document into a structured PRODUCT-VISION.md with goals, actors, capabilities, boundaries and open decisions. Create or revise it."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+contract:
+  reads: "`00-canvas/PROJECT-CANVAS.md` when it exists (preferred for new systems), otherwise a narrative, minutes or an existing vision."
+  writes: "`01-vision/PRODUCT-VISION.md` with `GOAL-` and `CAP-` IDs and an **Origin** for each."
+  gate: "the sponsor or PO approves the vision; recorded as a DEC. Never write approval yourself."
+scripts: []
+next_steps:
+  - "review-product-vision"
+  - "split-backlog"
+  - "wayfinder"
+  - "spec-req"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "create-product-vision"
+  description: "Turn a Product Owner narrative, idea, brief or existing vision document into a structured PRODUCT-VISION.md with goals, actors, capabilities, boundaries and open decisions. Create or revise it."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

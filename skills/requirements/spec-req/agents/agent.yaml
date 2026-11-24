@@ -1,0 +1,28 @@
+schema: requirements-skills/agent-manifest/1
+name: "spec-req"
+description: "Turn a backlog story, the current conversation or meeting minutes into a spec with the strategy to meet it and a plan of changes to every artifact it touches. No interview, just synthesis."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+  - "<artifact-root>/01-vision/PRODUCT-VISION.md"
+  - "<artifact-root>/02-backlog/BACKLOG.md"
+  - "<artifact-root>/shared/GLOSSARY.md"
+  - "<artifact-root>/shared/DECISIONS.md"
+  - "the input: a backlog story (US-NNN), a minutes file under inputs/minutes/, or the conversation"
+contract:
+  reads: "one input (below), `01-vision/`, `shared/GLOSSARY.md`, `shared/DECISIONS.md`, `02-backlog/BACKLOG.md`, and the graph when enabled."
+  writes: "`03-specs/SPEC-NNN-slug.md`, status `Draft`, with a **Plan of changes** (`PLN-NNN` rows) that `/apply-spec` consumes."
+  gate: "the PO approves the spec (`Approved by <person, date>` in its status, backed by a DEC). Never approve it yourself."
+scripts: []
+next_steps:
+  - "split-backlog"
+  - "apply-spec"
+  - "grill-with-docs"
+  - "to-questionnaire"
+  - "project-canvas"
+  - "create-product-vision"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "spec-req"
+  description: "Turn a backlog story, the current conversation or meeting minutes into a spec with the strategy to meet it and a plan of changes to every artifact it touches. No interview, just synthesis."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "US-NNN | path of minutes | (nothing: use this conversation)"}}}

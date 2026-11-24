@@ -19,6 +19,16 @@ Look for candidates, most severe first:
 
 Present the candidates to the user in order of severity. Judgement calls go to quality gates or the workflow doc; mechanical ones go to checks.
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+Check that these exist before doing anything else:
+
+- the session or logs to look back on
+
+If any of them is missing, **stop**. Do not invent, assume or reconstruct the missing data. Tell the user which inputs are missing and which skill produces each (`/setup-requirements-repo` for configuration, `/project-canvas` or `/create-product-vision` for the vision, `/split-backlog` for the backlog, `/spec-req` for specs, `/grill-with-docs` or `/to-questionnaire` for missing decisions); when several are missing or the way forward is unclear, tell the user to run `/wayfinder`.
+
+Also read, when relevant: `<artifact-root>/shared/GLOSSARY.md`; `<artifact-root>/shared/DECISIONS.md`.
+
 ## Next steps
 
 Apply accepted items; for changes to skills, follow `docs/AUTHORING-SKILLS.md`. To continue work, run `/ask-req`.

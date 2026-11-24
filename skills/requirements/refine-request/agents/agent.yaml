@@ -1,0 +1,23 @@
+schema: requirements-skills/agent-manifest/1
+name: "refine-request"
+description: "Refine one story, or one small well-scoped request, end to end into requirements, acceptance criteria, tests and traceability. Run it per story in a fresh context."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+  - "<artifact-root>/02-backlog/BACKLOG.md (the story row)"
+  - "<artifact-root>/01-vision/PRODUCT-VISION.md"
+  - "<artifact-root>/shared/GLOSSARY.md"
+  - "<artifact-root>/shared/DECISIONS.md"
+contract:
+  reads: "the story's backlog row and operations checklist, its file if any, the vision, glossary, decisions, graph."
+  writes: "`04-stories/US-NNN.md`, its checklist ticks and progress in `BACKLOG.md`; a CHG when in change mode."
+  gate: "the PO reviews stories that reach `Ready for human review`."
+scripts: []
+next_steps:
+  - "apply-spec"
+  - "retro"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "refine-request"
+  description: "Refine one story, or one small well-scoped request, end to end into requirements, acceptance criteria, tests and traceability. Run it per story in a fresh context."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "US-NNN or the request"}}}

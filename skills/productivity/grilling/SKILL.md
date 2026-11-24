@@ -7,6 +7,10 @@ Interview the user relentlessly until you reach a shared understanding. Map the 
 
 Reply in the user's language. Read `docs/agents/requirements-workflow.md` when it exists (output language, ID scope).
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+No file is required: it reads only the subject under discussion; callers add their own inputs.
+
 ## Rounds
 
 The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you have not heard yet. Ask the whole frontier in one round: number each question and give your recommended answer. Then wait for the answers before the next round.
@@ -27,6 +31,13 @@ Word each question so "yes" accepts your recommended answer. A question that dep
 
 Question the business, not the solution: who, outcome, eligibility, exceptions, boundaries, volumes and limits, legal or contractual rules, what "done" looks like to the PO.
 
+## Modes
+
+The caller (or the user: `/grill-me quick`) picks a mode. Default is `exhaustive`.
+
+- **exhaustive**: keep going round after round until the frontier is empty. Use for visions, specs, changes and anything that will be approved.
+- **quick**: one round of at most **five** questions, the highest-impact first, each with your recommended answer. Then list what you did **not** ask, as a short "Not asked" list, and stop. Never claim the frontier is empty after a quick round, and do not mark anything Confirmed that was not answered.
+
 ## Facts versus decisions
 
 Finding _facts_ is your job. When a frontier question needs a fact from files, artifacts or tools, look it up yourself (delegate to a sub-agent with a fresh context window when the harness supports it) and ask only what remains. The _decisions_ belong to the human: put each to them and wait. Never answer your own question, and never mark a decision Confirmed on the user's behalf.
@@ -43,14 +54,14 @@ If the caller is stateless (`grill-me`), report the impact in chat only and writ
 
 ## Done
 
-The session is done when the frontier is empty: every branch visited, nothing left silently assumed (and, in change mode, the impact round confirmed). Do not act on the result until the user confirms the shared understanding.
+In `exhaustive` mode the session is done when the frontier is empty (a `quick` round ends after its one round, with "Not asked" listed): every branch visited, nothing left silently assumed (and, in change mode, the impact round confirmed). Do not act on the result until the user confirms the shared understanding.
 
 ## Next steps
 
 Suggest one, never auto-run. End with `➡️ **Next step:** ...`.
 
 - Stateful session, decisions and terms need recording: tell the user to run `/grill-with-docs` next time, or record them now with the `domain-modeling` skill.
-- Understanding is complete and a feature or capability emerged: tell the user to run `/to-spec`.
+- Understanding is complete and a feature or capability emerged: tell the user to run `/spec-req`.
 - The product itself is still undefined: tell the user to run `/create-product-vision`.
 - An answer sits with someone who is not here: tell the user to run `/to-questionnaire`.
 - A change was confirmed: tell the user to run `/refine-request` on each impacted story, blockers first.

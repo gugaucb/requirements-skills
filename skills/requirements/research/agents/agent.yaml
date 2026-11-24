@@ -1,0 +1,16 @@
+schema: requirements-skills/agent-manifest/1
+name: "research"
+description: "Investigate a question against high-trust primary sources (regulations, official documentation, existing system docs, contracts) and capture the findings as a cited Markdown file. Use when a decision waits on a fact outside the repo, or reading legwork can be delegated."
+invocation: model   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  []
+contract: {}
+scripts: []
+next_steps:
+  - "grill-with-docs"
+  - "wayfinder"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "research"
+  description: "Investigate a question against high-trust primary sources (regulations, official documentation, existing system docs, contracts) and capture the findings as a cited Markdown file. Use when a decision waits on a fact outside the repo, or reading legwork can be delegated."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

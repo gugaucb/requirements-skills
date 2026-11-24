@@ -15,6 +15,10 @@ Include:
 
 Do not duplicate content that lives in artifacts (vision, specs, stories, DECISIONS.md, CHG files, tracker issues). Reference them by path or URL. Redact secrets and personal data. If the user passed arguments, tailor the document to that focus.
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+No file is required: it summarizes the current conversation.
+
 ## Next steps
 
 Tell the user the path of the file and how to seed the new session with it. In the new session, `/ask-req` re-orients from the artifacts.

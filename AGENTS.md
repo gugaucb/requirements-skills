@@ -6,7 +6,7 @@ This repo ships agent skills for eliciting and documenting requirements. It neve
 
 - `skills/requirements/` the requirements flow. `skills/productivity/` general tools (`grilling`, `grill-me`, `handoff`, `wait-what`, `to-questionnaire`). `skills/deprecated/` renamed v1 skills (pointer only).
 - Each skill is `skills/<bucket>/<name>/SKILL.md`, owns its reference files, and has a generated `agents/openai.yaml` (Codex UI metadata; run `python3 scripts/sync_adapters.py`).
-- Optional knowledge graph: `skills/requirements/graph-sync/` (deterministic `req-graph.py`, merges with Graphify). Skills must work without it.
+- Phases and contracts: every flow skill (`project-canvas`, `create-product-vision`, `split-backlog`, `spec-req`, `apply-spec`, `review-spec`, `refine-request`) has a `## Contract` with Reads, Writes and Gate; the output of one phase is the input of the next. Optional knowledge graph: `skills/requirements/graph-sync/` (deterministic `req-graph.py`, merges with Graphify). Skills must work without it.
 - `docs/` repo-level docs. `examples/` a fictional product with a full trail. `evaluations/` manual behaviour cases.
 
 ## Invocation: two kinds of skill
@@ -18,6 +18,13 @@ This repo ships agent skills for eliciting and documenting requirements. It neve
 ## Invoking another skill (harness-neutral)
 
 Write "Invoke the `name` skill". It means: use your harness's skill mechanism (slash command, `activate_skill`, or by name in conversation). If none is available, read `skills/**/<name>/SKILL.md` and follow it. Never write "Call the Skill tool with ...": no such universal tool exists. A skill named in a handoff is a suggestion, not proof it ran. See `docs/INVOCATION.md`.
+
+## Preflight, evidence and manifests (every skill)
+
+- Every `SKILL.md` starts with `## Preflight (Pré-condições / Insumos Obrigatórios)`: required files in the standard layout, then the stop rule (never invent missing data; name the producing skill; `/wayfinder` when unclear).
+- Validation skills run their script **before** answering and attach the output as Evidence.
+- `agents/agent.yaml` and `agents/openai.yaml` are generated from `SKILL.md`: run `python3 scripts/sync_adapters.py` after editing a skill.
+- CI contract for the scripts: exit 0 consistent, 1 orphans or untested rules, 2 cycles, 3 critical failure.
 
 ## Next steps (every skill)
 

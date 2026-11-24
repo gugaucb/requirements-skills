@@ -17,14 +17,14 @@
 | [Actor] | [Outcome] | Confirmed / Proposed / Pending |
 
 ## Product goals
-| ID | Goal and intended outcome | Measure (if agreed) | Evidence / status |
-| --- | --- | --- | --- |
-| GOAL-001 | [Outcome] | [Metric or Pending] | [Source / status] |
+| ID | Goal and intended outcome | Measure (if agreed) | Evidence / status | Origin |
+| --- | --- | --- | --- | --- |
+| GOAL-001 | [Outcome] | [Metric or Pending] | [Source / status] | [OBJ-, JUS- from the canvas, or the source] |
 
 ## Business capabilities
-| ID | Capability and business value | Goal links | Evidence / status |
-| --- | --- | --- | --- |
-| CAP-001 | [Observable ability] | GOAL-001 | [Source / status] |
+| ID | Capability and business value | Goal links | Evidence / status | Origin |
+| --- | --- | --- | --- | --- |
+| CAP-001 | [Observable ability] | GOAL-001 | [Source / status] | [ENT-, PRD- from the canvas, or the source] |
 
 ## Scope boundaries
 | In scope | Explicitly out of scope | Evidence / status |

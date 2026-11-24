@@ -7,9 +7,19 @@ Actively build the product's business language as you work: challenge terms, inv
 
 The product glossary holds **business** terms. The process vocabulary (`US`, `FR`, `Ready`, ...) lives in `docs/agents/requirements-vocabulary.md`. Never copy one into the other.
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+Check that these exist before doing anything else:
+
+- `docs/agents/requirements-workflow.md`
+- `<artifact-root>/shared/GLOSSARY.md`
+- `<artifact-root>/shared/DECISIONS.md`
+
+If any of them is missing, **stop**. Do not invent, assume or reconstruct the missing data. Tell the user which inputs are missing and which skill produces each (`/setup-requirements-repo` for configuration, `/project-canvas` or `/create-product-vision` for the vision, `/split-backlog` for the backlog, `/spec-req` for specs, `/grill-with-docs` or `/to-questionnaire` for missing decisions); when several are missing or the way forward is unclear, tell the user to run `/wayfinder`.
+
 ## Files
 
-Single context: `GLOSSARY.md` and `DECISIONS.md` under the product root. If `GLOSSARY-MAP.md` exists the repo has several contexts; the map says where each lives. Create files lazily, when the first term or decision is resolved.
+Single context: `shared/GLOSSARY.md` and `shared/DECISIONS.md`. If `GLOSSARY-MAP.md` exists the repo has several contexts; the map says where each lives. `/setup-requirements-repo` seeds empty skeletons; if they are missing and the user agrees, create them from the formats below before the first entry.
 
 ## During the session
 
@@ -23,10 +33,20 @@ Single context: `GLOSSARY.md` and `DECISIONS.md` under the product root. If `GLO
 
 `GLOSSARY.md` is a glossary and nothing else: no requirements, no implementation detail, no scratch notes.
 
+Minimal examples (full formats in [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md) and [DECISIONS-FORMAT.md](DECISIONS-FORMAT.md)):
+
+```md
+**Active order**:
+An order that is neither delivered nor cancelled. _Status: Proposed_
+_Avoid_: Open order
+
+| DEC-003 | Add status "On hold" for orders under fraud review | Confirmed | Ana (PO), 2026-05-20 | email thread | US-001, US-002 |
+```
+
 ## Done
 
 Every term the session touched is defined, listed under _Avoid_, or explicitly Pending; every decision has an owner and a status.
 
 ## Next steps
 
-End with `➡️ **Next step:** ...`. Return to the calling flow (grilling, `/refine-request`, `/to-spec`). If a term change touched existing IDs, suggest `/refine-request` on the Needs review items.
+End with `➡️ **Next step:** ...`. Return to the calling flow (grilling, `/refine-request`, `/spec-req`). If a term change touched existing IDs, suggest `/refine-request` on the Needs review items.

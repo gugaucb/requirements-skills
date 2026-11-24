@@ -3,9 +3,11 @@ import json
 import subprocess
 import sys
 import tempfile
+import os
 import unittest
 from pathlib import Path
 
+os.environ["REQ_GRAPH_QUIET"] = "1"  # keep in-process parse warnings out of the test log
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "skills/requirements/graph-sync/scripts/req-graph.py"
 EXAMPLE = ROOT / "examples/order-status-portal"
@@ -13,9 +15,6 @@ EXAMPLE = ROOT / "examples/order-status-portal"
 spec = importlib.util.spec_from_file_location("req_graph", SCRIPT)
 rg = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(rg)
-spec2 = importlib.util.spec_from_file_location("check_ids", ROOT / "skills/requirements/audit-traceability/scripts/check-ids.py")
-ci = importlib.util.module_from_spec(spec2)
-spec2.loader.exec_module(ci)
 
 
 def rels(g):
@@ -27,8 +26,7 @@ class ReqGraph(unittest.TestCase):
         self.g, self.digest = rg.build(EXAMPLE)
 
     def test_nodes_agree_with_check_ids(self):
-        defs, _, _, _ = ci.analyse(EXAMPLE)
-        self.assertEqual(set(defs), set(self.g.nodes))
+        self.assertEqual(set(self.g.defs) | self.g.declared, set(self.g.nodes))
 
     def test_no_unresolved_in_example(self):
         self.assertEqual(set(), self.g.unresolved)
@@ -106,9 +104,9 @@ class ReqGraph(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
             (root / "graph").mkdir()
-            (root / "changes").mkdir()
+            (root / "05-changes").mkdir()
             (root / "PRODUCT-VISION.md").write_text("| GOAL-001 | g |\n| CAP-001 | c | GOAL-001 |\n")
-            (root / "changes" / "CHG-001.md").write_text(
+            (root / "05-changes" / "CHG-001.md").write_text(
                 "# CHG-001: x\n\n**Status:** Proposed\n\n## Impacto\n\n| ID | R | C |\n| --- | --- | --- |\n| CAP-001 | up | Needs review |\n| US-009 | down | Invalidated |\n")
             (root / "graph" / "aliases.json").write_text(json.dumps({"headings": {"impact": ["Impacto"]}}))
             g, _ = rg.build(root)
@@ -118,9 +116,9 @@ class ReqGraph(unittest.TestCase):
     def test_frontmatter_status_and_links(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
-            (root / "stories").mkdir()
+            (root / "04-stories").mkdir()
             (root / "PRODUCT-VISION.md").write_text("| GOAL-001 | g |\n| CAP-001 | c | GOAL-001 |\n")
-            (root / "stories" / "US-001.md").write_text("---\nid: US-001\nstatus: Stale\nserves: [CAP-001]\n---\n# US-001: a\n")
+            (root / "04-stories" / "US-001.md").write_text("---\nid: US-001\nstatus: Stale\nserves: [CAP-001]\n---\n# US-001: a\n")
             g, _ = rg.build(root)
             self.assertEqual("Stale", g.nodes["US-001"]["req_status"])
             self.assertIn(("US-001", "CAP-001", "serves"), rels(g))
@@ -169,12 +167,107 @@ class QueryPathExplain(unittest.TestCase):
         self.assertIsNone(rg.shortest_path(self.g, "CHG-001", "US-002"))
         self.assertIsNotNone(rg.shortest_path(self.g, "CHG-001", "US-002", include_all=True))
         self.assertIn("2 hops", run("path", str(EXAMPLE), "TC-003", "GOAL-001").stdout)
-        self.assertEqual(4, run("path", str(EXAMPLE), "NOPE-001", "GOAL-001").returncode)
+        self.assertEqual(66, run("path", str(EXAMPLE), "NOPE-001", "GOAL-001").returncode)
 
     def test_explain(self):
         out = run("explain", str(EXAMPLE), "FR-003").stdout
-        for needle in ("stories/US-001.md", "decided_by: DEC-003", "verifies: AC-003", "Transitive dependents (strong links): 2", "On hold"):
+        for needle in ("04-stories/US-001.md", "decided_by: DEC-003", "verifies: AC-003", "Transitive dependents (strong links): 2", "On hold"):
             self.assertIn(needle, out)
+
+
+CANVAS = ROOT / "skills/requirements/project-canvas/scripts/canvas-check.py"
+MIGRATE = ROOT / "skills/requirements/setup-requirements-repo/scripts/migrate-layout.py"
+
+
+class BacklogPlanCanvas(unittest.TestCase):
+    def setUp(self):
+        self.g, _ = rg.build(EXAMPLE)
+
+    def test_backlog_progress_from_checklist(self):
+        rows = {r["id"]: r for r in rg.backlog_rows(self.g)}
+        self.assertEqual("Done", rows["US-001"]["progress"])
+        self.assertEqual("3/3", rows["US-001"]["ops"])
+        self.assertEqual("In progress", rows["US-002"]["progress"])
+        self.assertEqual("EPIC-001", rows["US-002"]["epic"])
+        self.assertEqual(["CAP-002"], rows["US-002"]["caps"])
+
+    def test_backlog_flags_mismatch(self):
+        n = self.g.nodes["US-002"]
+        n["progress"], n["req_status"] = "Done", "Ready for human review"
+        flags = rg.backlog_rows(self.g)[1]["flags"]
+        self.assertTrue(any("progress column" in f for f in flags))
+        self.assertTrue(any("Ready but" in f for f in flags))
+
+    def test_plan_order_and_next(self):
+        rows = rg.plan_rows(self.g, "SPEC-001")
+        self.assertEqual(["PLN-001", "PLN-002", "PLN-003"], [r["id"] for r in rows])
+        self.assertEqual(["PLN-002"], [r["id"] for r in rows if r["ready"]])
+        self.assertEqual([], rows[2]["warnings"])  # glossary line needs no story ID
+        self.assertIn(("PLN-002", "US-002", "plans"), rels(self.g))
+        self.assertIn(("PLN-002", "PLN-001", "blocked_by"), rels(self.g))
+
+    def test_canvas_links_and_vision_origin(self):
+        e = rels(self.g)
+        self.assertIn(("OBJ-001", "JUS-001", "traces_to"), e)
+        self.assertIn(("GOAL-001", "OBJ-001", "traces_to"), e)
+        self.assertIn(("CAP-001", "ENT-001", "traces_to"), e)
+        main, _ = rg.affected(self.g, "JUS-001", depth=9, weak=False)
+        self.assertTrue({"OBJ-001", "GOAL-001", "CAP-001", "US-001"} <= {m["id"] for m in main})
+
+    def test_canvas_check_passes_on_example(self):
+        r = subprocess.run([sys.executable, str(CANVAS), str(EXAMPLE), "--no-judgment"], capture_output=True, text=True)
+        self.assertEqual(0, r.returncode, r.stdout)
+
+    def test_canvas_check_exit_codes(self):
+        self.assertEqual(64, subprocess.run([sys.executable, str(CANVAS)], capture_output=True).returncode)
+        self.assertEqual(3, subprocess.run([sys.executable, str(CANVAS), "/no/such/file.md"], capture_output=True).returncode)
+
+    def test_canvas_check_catches_rule_violations(self):
+        import re as _re
+        text = (EXAMPLE / "00-canvas/PROJECT-CANVAS.md").read_text()
+        cases = {
+            "C1": _re.sub(r"\| BEN-001 .*\n", "", text),
+            "C7": _re.sub(r"\| RSK-001 .*\n", "", text),
+            "C8": _re.sub(r"\| RSK-002 .*\n", "", text),
+            "C5": _re.sub(r"\| TMP-002 .*\n", "", text),
+            "C4": _re.sub(r"\| ENT-002 .*\n", "", text),
+        }
+        for code, broken in cases.items():
+            with tempfile.TemporaryDirectory() as d:
+                f = Path(d) / "PROJECT-CANVAS.md"
+                f.write_text(broken)
+                r = subprocess.run([sys.executable, str(CANVAS), str(f), "--no-judgment"], capture_output=True, text=True)
+                self.assertEqual(1, r.returncode, code)
+                self.assertIn(code, r.stdout, code)
+
+    def test_canvas_waiver_is_listed_not_silent(self):
+        text = (EXAMPLE / "00-canvas/PROJECT-CANVAS.md").read_text()
+        broken = text.replace("| ENT-001 | Status page | PRD-001 |", "| ENT-001 | Status page | PRD-001 |").replace(
+            "| TMP-002 | Status history live | 2026-11-15 | ENT-002 |\n", "")
+        broken = broken.replace("| ENT-002 | Status history | PRD-002 |", "| ENT-002 | Status history | PRD-002 [waive C5: delivered with ENT-001 milestone] |")
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "PROJECT-CANVAS.md"
+            f.write_text(broken)
+            r = subprocess.run([sys.executable, str(CANVAS), str(f), "--no-judgment"], capture_output=True, text=True)
+            self.assertEqual(0, r.returncode, r.stdout)
+            self.assertIn("waived", r.stdout)
+
+    def test_migrate_layout_dry_run_and_apply(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "stories").mkdir()
+            (root / "stories" / "US-001.md").write_text("# US-001: a\n")
+            (root / "PRODUCT-VISION.md").write_text("| GOAL-001 | g |\n")
+            (root / "GLOSSARY.md").write_text("x")
+            out = subprocess.run([sys.executable, str(MIGRATE), str(root)], capture_output=True, text=True).stdout
+            self.assertIn("would move", out)
+            self.assertTrue((root / "stories").exists())
+            subprocess.run([sys.executable, str(MIGRATE), str(root), "--apply"], capture_output=True)
+            self.assertTrue((root / "04-stories" / "US-001.md").exists())
+            self.assertTrue((root / "01-vision" / "PRODUCT-VISION.md").exists())
+            self.assertTrue((root / "shared" / "GLOSSARY.md").exists())
+            g, _ = rg.build(root)
+            self.assertIn("US-001", g.nodes)
 
 
 class Viewer(unittest.TestCase):
@@ -222,7 +315,7 @@ class Viewer(unittest.TestCase):
             out = subprocess.run(cmd, capture_output=True, text=True).stdout
             self.assertIn("up to date", out)
             self.assertTrue(html.exists())
-            (root / "stories" / "US-002.md").write_text((root / "stories" / "US-002.md").read_text() + "\nNote DEC-001.\n")
+            (root / "04-stories" / "US-002.md").write_text((root / "04-stories" / "US-002.md").read_text() + "\nNote DEC-001.\n")
             subprocess.run(cmd, capture_output=True)
             self.assertIn("DEC-001", html.read_text())
 

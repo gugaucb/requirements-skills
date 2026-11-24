@@ -1,0 +1,17 @@
+schema: requirements-skills/agent-manifest/1
+name: "review-readiness"
+description: "Audit story clarity, requirements, tests, acceptance coverage and recorded human decisions against local readiness rules. Use when doing the final refinement review; never to impersonate PO signoff."
+invocation: model   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+  - "<artifact-root>/04-stories/US-NNN.md"
+  - "[QUALITY-GATES.md](QUALITY-GATES.md)"
+contract: {}
+scripts: []
+next_steps:
+  - "grill-with-docs"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "review-readiness"
+  description: "Audit story clarity, requirements, tests, acceptance coverage and recorded human decisions against local readiness rules. Use when doing the final refinement review; never to impersonate PO signoff."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

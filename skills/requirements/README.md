@@ -10,7 +10,7 @@ Reachable only when you type them (`disable-model-invocation: true`).
 - **[setup-requirements-repo](./setup-requirements-repo/SKILL.md)**: Configure artifact root, tracker, language, IDs, triage roles.
 - **[grill-with-docs](./grill-with-docs/SKILL.md)**: Grilling that also records glossary, decisions and change impact.
 - **[create-product-vision](./create-product-vision/SKILL.md)**: Turn a PO narrative into `PRODUCT-VISION.md`.
-- **[to-spec](./to-spec/SKILL.md)**: Turn the conversation into a feature spec. No interview.
+- **[spec-req](./spec-req/SKILL.md)**: Turn the conversation into a feature spec. No interview.
 - **[split-backlog](./split-backlog/SKILL.md)**: Slice a spec into vertical stories with blocking edges.
 - **[refine-request](./refine-request/SKILL.md)**: Refine one story end to end.
 - **[triage](./triage/SKILL.md)**: Move incoming requests and change requests through triage roles.

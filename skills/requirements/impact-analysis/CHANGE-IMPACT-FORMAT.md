@@ -1,6 +1,6 @@
 # CHG-NNN format
 
-One file per change at `<artifact-root>/changes/CHG-NNN.md`. IDs are never reused.
+One file per change at `<artifact-root>/05-changes/CHG-NNN.md`. IDs are never reused.
 
 ```md
 # CHG-NNN: <short title>

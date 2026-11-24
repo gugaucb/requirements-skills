@@ -1,0 +1,18 @@
+schema: requirements-skills/agent-manifest/1
+name: "audit-traceability"
+description: "Verify links from product goals and capabilities through epics, stories, functional and non-functional requirements, acceptance criteria and tests, and detect Stale items after changes. Use after changes, before reviews, or when IDs may be duplicated or dangling."
+invocation: model   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "at least one <artifact-root>/04-stories/US-NNN.md"
+  - "the graph-sync scripts (graph-sync/scripts/req-graph.py, reqmd.py)"
+contract: {}
+scripts:
+  - "scripts/check-ids.py"
+next_steps:
+  - "grill-with-docs"
+  - "review-readiness"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "audit-traceability"
+  description: "Verify links from product goals and capabilities through epics, stories, functional and non-functional requirements, acceptance criteria and tests, and detect Stale items after changes. Use after changes, before reviews, or when IDs may be duplicated or dangling."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

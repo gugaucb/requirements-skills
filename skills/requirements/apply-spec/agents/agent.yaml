@@ -1,0 +1,23 @@
+schema: requirements-skills/agent-manifest/1
+name: "apply-spec"
+description: "Apply an approved spec's plan of changes to the artifacts, one line at a time in dependency order, recording each in a single change report. Resumable."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+  - "<artifact-root>/03-specs/SPEC-NNN-slug.md with status Approved by <person, date>"
+  - "<artifact-root>/02-backlog/BACKLOG.md"
+  - "<artifact-root>/shared/GLOSSARY.md"
+  - "<artifact-root>/shared/DECISIONS.md"
+contract:
+  reads: "the approved `03-specs/SPEC-NNN`, `BACKLOG.md`, the graph, the artifacts named by the plan."
+  writes: "the artifacts the plan names, `04-stories/US-NNN.md` for new stories, one `05-changes/CHG-NNN.md` for the whole spec, the plan statuses and backlog checklists."
+  gate: "the PO reviews the result; `/review-spec` checks it against the spec."
+scripts: []
+next_steps:
+  - "create-product-vision"
+  - "project-canvas"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "apply-spec"
+  description: "Apply an approved spec's plan of changes to the artifacts, one line at a time in dependency order, recording each in a single change report. Resumable."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "SPEC-NNN [how many lines, default 1 story]"}}}

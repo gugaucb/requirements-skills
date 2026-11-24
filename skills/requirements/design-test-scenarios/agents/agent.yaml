@@ -1,0 +1,17 @@
+schema: requirements-skills/agent-manifest/1
+name: "design-test-scenarios"
+description: "Derive implementation-independent test scenarios with setup, action, expected evidence and negative cases from acceptance criteria and requirements. Use when verifying criteria and requirements."
+invocation: model   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "<artifact-root>/04-stories/US-NNN.md with FR, NFR and AC"
+contract: {}
+scripts: []
+next_steps:
+  - "diagram-requirements"
+  - "audit-traceability"
+  - "review-readiness"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "design-test-scenarios"
+  description: "Derive implementation-independent test scenarios with setup, action, expected evidence and negative cases from acceptance criteria and requirements. Use when verifying criteria and requirements."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

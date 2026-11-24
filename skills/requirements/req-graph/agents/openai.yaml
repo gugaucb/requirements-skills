@@ -1,0 +1,5 @@
+interface:
+  display_name: "Req Graph"
+  short_description: "Ask the requirements graph in plain words: rebuild it, open the viewer, find what depends on an"
+policy:
+  allow_implicit_invocation: false

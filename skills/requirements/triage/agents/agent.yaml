@@ -1,0 +1,23 @@
+schema: requirements-skills/agent-manifest/1
+name: "triage"
+description: "Move incoming requests and change requests through a state machine of triage roles, classify them, check impact, grill if needed, and write refinement-ready briefs."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+  - "docs/agents/issue-tracker.md"
+  - "docs/agents/triage-labels.md"
+  - "the incoming request"
+contract: {}
+scripts: []
+next_steps:
+  - "spec-req"
+  - "split-backlog"
+  - "refine-request"
+  - "grill-with-docs"
+  - "wayfinder"
+  - "to-questionnaire"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "triage"
+  description: "Move incoming requests and change requests through a state machine of triage roles, classify them, check impact, grill if needed, and write refinement-ready briefs."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

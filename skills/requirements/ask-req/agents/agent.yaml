@@ -1,0 +1,15 @@
+schema: requirements-skills/agent-manifest/1
+name: "ask-req"
+description: "Ask which requirements skill or flow fits your situation. A router over every skill in this repo, aware of the current phase and state of your artifacts."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  []
+contract: {}
+scripts: []
+next_steps:
+  - "apply-spec"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "ask-req"
+  description: "Ask which requirements skill or flow fits your situation. A router over every skill in this repo, aware of the current phase and state of your artifacts."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

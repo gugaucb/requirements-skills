@@ -4,9 +4,27 @@ description: Break a spec, capability or epic into thin vertical user stories, e
 disable-model-invocation: true
 ---
 
-Break a spec, capability, epic or the current conversation into **stories**: thin vertical slices of user value, each declaring the stories that **block** it. This is the tracer-bullet idea applied to requirements.
+Phase 2. Decompose the capabilities of the vision into a **WBS** (EAP): capability, optional epic, story. Break a spec, capability, epic or the current conversation into **stories**: thin vertical slices of user value, each declaring the stories that **block** it. This is the tracer-bullet idea applied to requirements.
 
 Read `docs/agents/requirements-workflow.md` and `docs/agents/issue-tracker.md`. If missing, tell the user to run `/setup-requirements-repo`.
+
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+Check that these exist before doing anything else:
+
+- `docs/agents/requirements-workflow.md`
+- `<artifact-root>/01-vision/PRODUCT-VISION.md`
+- `<artifact-root>/shared/GLOSSARY.md`
+
+If any of them is missing, **stop**. Do not invent, assume or reconstruct the missing data. Tell the user which inputs are missing and which skill produces each (`/setup-requirements-repo` for configuration, `/project-canvas` or `/create-product-vision` for the vision, `/split-backlog` for the backlog, `/spec-req` for specs, `/grill-with-docs` or `/to-questionnaire` for missing decisions); when several are missing or the way forward is unclear, tell the user to run `/wayfinder`.
+
+Also read, when relevant: `<artifact-root>/02-backlog/BACKLOG.md` (to avoid duplicates); a spec, epic or capability to slice.
+
+## Contract
+
+- **Reads:** `01-vision/PRODUCT-VISION.md` (the CAPs), a spec or epic if given, `BACKLOG.md`.
+- **Writes:** `02-backlog/BACKLOG.md`: a table (capability, epic, story, name, blocked by, status, progress) and, per story, an **operations checklist** (`- [ ] operation: what it does`). Publishes to the tracker only on request.
+- **Gate:** the PO confirms the breakdown and the order.
 
 ## Process
 
@@ -27,11 +45,13 @@ Use the conversation. If the user passes a reference (a spec path, `CAP-NNN`, an
 
 </slicing-rules>
 
+Give each story an **operations checklist**: the business operations it covers, one line each, in business language (for example "include customer", "edit customer", "remove customer", "consult customer"), each with a short description. The checklist is how progress is tracked; `refine-story` ticks a line when a requirement, criterion and test cover it.
+
 Give each story its **Blocked by** edges: stories that must be done first. No blockers means it can start now.
 
 ### 3. Quiz the user
 
-Present a numbered list. For each: **Title**, **Serves** (GOAL/CAP/EPIC), **Blocked by**, **What it delivers**. Ask:
+Present a numbered list. For each: **Title**, **Serves** (CAP/EPIC), **Blocked by**, **What it delivers**, **Operations**. Ask:
 
 - Does the granularity feel right (too coarse, too fine)?
 - Does each story depend only on stories that genuinely gate it?
@@ -41,7 +61,18 @@ Iterate until the user approves. Priority and sprint assignment are PO-owned: re
 
 ### 4. Record
 
-Write rows to `BACKLOG.md` (format in [BACKLOG-FORMAT.md](BACKLOG-FORMAT.md)), allocating `US-NNN` IDs without recycling. Create no story files yet; `write-user-story` does that lazily.
+A minimal result (full format in [BACKLOG-FORMAT.md](BACKLOG-FORMAT.md)):
+
+```md
+| Order | Capability | Epic | Story | Name | Blocked by | Status | Progress |
+| Proposed 1 | CAP-001 | EPIC-001 Registry | US-001 | Maintain customer | None | Draft | Pending |
+
+### US-001: Maintain customer
+- [ ] include customer: register a new customer with the mandatory data
+- [ ] edit customer: change the data of an existing customer
+```
+
+Write rows and operations blocks to `02-backlog/BACKLOG.md` (format in [BACKLOG-FORMAT.md](BACKLOG-FORMAT.md)), allocating `US-NNN` IDs without recycling. Create no story files yet; `write-user-story` does that lazily. Called on stories a spec created, add only those rows.
 
 Publish to the tracker only when the user explicitly asks and the tracker doc allows it: one issue per story in dependency order (blockers first), native blocking links where the tracker has them, label `ready-for-refinement`. Never close or edit a parent issue.
 
@@ -55,5 +86,6 @@ Every candidate story is in `BACKLOG.md` with serves-links, blockers and a Propo
 
 End with `➡️ **Next step:** ...`.
 
+- Splitting for a spec: back to `/spec-req` to finish the plan, then the PO approves and `/apply-spec` runs.
 - Start with the first story that has no blockers: `/refine-request US-NNN`. Work the frontier (all blockers done), a fresh context per story.
 - Broad stories remain after the quiz: run `/split-backlog` again on them.

@@ -1,5 +1,30 @@
 # Changelog
 
+## 3.1.0
+
+- Shared `reqmd.py` (IDs, safe I/O, tolerant table normalization, `[PARSE-WARNING]`) used by `req-graph.py`, `check-ids.py` and `canvas-check.py`; `check-ids.py` is now a shim over `req-graph.py validate`.
+- `req-graph.py validate` (alias `--validate`) and `critical`: duplicates, dangling references, matrix gaps, `Stale`, dependency cycles (three-color DFS) and the Top 5 critical artifacts. CI exit codes 0, 1, 2, 3 (64 usage, 66 unknown target); `--strict` makes warnings fatal.
+- IDs upper-cased on read; UTF-8 with `errors="replace"`; malformed rows and IDs reported on stderr; rows continued on the next line, without edge pipes, with `\|` or `<br>` are parsed.
+- Viewer payload fully escaped (ASCII, no `<`, `>`, `&`); still zero external assets.
+- Every `SKILL.md` starts with a Preflight section (stop and name the producing skill instead of inventing); generated `agents/agent.yaml` manifest per skill (neutral, MCP-tool-shaped block).
+- `project-canvas`, `audit-traceability`, `review-readiness`, `review-spec` must run their script before answering and attach the output as Evidence (`Unverified` without a terminal).
+- Return routes (`docs/FLOW.md`, QUALITY-GATES "Return to"), verdicts `PASS`, `NEEDS CHANGES`, `BLOCKED`.
+- Frontmatter `status` and `version` on specs and stories, checked against the `**Status:**` line.
+- `grilling` modes `quick` and `exhaustive` (`/grill-me quick`); `setup` seeds empty `GLOSSARY.md` and `DECISIONS.md`; inline example tables in four skills.
+- Not done, with reasons (see `docs/DE-PARA.md` section 6): `RN-` and `EP-` prefixes, `--bundle-assets`, merging `spec-req` with `specify-requirements`, merging the two grilling skills into one.
+
+## 3.0.0
+
+Breaking: renamed skill, folder layout, backlog format.
+
+- Five-phase flow with an input/output contract per skill (`## Contract`: Reads, Writes, Gate), enforced by the validator.
+- New: `project-canvas` (guided Project Model Canvas, integration rules C1 to C10, R, judgment J1 to J6, `canvas-check.py`), `apply-spec`, `review-spec`, `refine-story` (internal pipeline), `req-graph` (plain-words front door to the graph). 32 skills.
+- Renamed `to-spec` to `spec-req`; it now takes a backlog story, a conversation or meeting minutes and writes a strategy plus a **plan of changes** (`PLN-NNN`).
+- `create-product-vision` derives goals and capabilities from the canvas with an Origin column. `split-backlog` builds a WBS (capability, epic, story) with an operations checklist per story; Progress is derived from it.
+- `refine-request` is now a thin classifier over `refine-story`.
+- Graph: canvas types and `PLN`, relations `traces_to` and `plans`, commands `backlog` and `plan`; check-ids declares backlog stories without a file instead of flagging them.
+- Numbered folder layout (`00-canvas` to `05-changes`, `inputs`, `shared`) with `migrate-layout.py` (dry run by default).
+
 ## 2.4.0
 
 - User story template: optional `## Screens` section (after Fields) with `SCREEN-FORMAT.md`: field groups, actions and states per screen (`SCR-NNN`), referencing `FLD-` fields. Behavior, not visual design.

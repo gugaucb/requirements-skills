@@ -8,6 +8,10 @@ disable-model-invocation: true
 
 Scaffold the per-repo configuration the requirements skills assume. This is a prompt-driven skill, not a script: explore, present, confirm, then write.
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+No file is required: it creates the configuration; a git working directory is only read, never written.
+
 ## Process
 
 ### 1. Explore
@@ -26,7 +30,7 @@ Read what exists; assume nothing:
 
 Summarise what is present and missing. Take the sections in order, one answer each. Lead with the recommended answer so it can be accepted in a word; skip a section the exploration already settled.
 
-**A. Artifact root and output language.** Recommend `artifacts/<product>/`. Ask the language of written artifacts (Gherkin keywords follow it, e.g. pt-BR). Conversation follows the user's own language.
+**A. Artifact root and output language.** Recommend `artifacts/<product>/` with the numbered phase layout (`00-canvas` to `05-changes`, `inputs`, `shared`; see `requirements-workflow.md`). Ask the language of written artifacts (Gherkin keywords follow it, e.g. pt-BR). Conversation follows the user's own language.
 
 **B. Issue tracker.** Where stories and wayfinder maps are published: **local Markdown** (default, no remote), **GitHub**, **GitLab**, or **other** (user describes it in a paragraph). Selecting a tracker never authorizes remote writes; each publish is confirmed.
 
@@ -77,7 +81,7 @@ Artifact root, language, ID and status policy. See `docs/agents/requirements-wor
 [single-context or multi-context]. See `docs/agents/domain.md`.
 ```
 
-Write the files from the seeds in this folder: [requirements-workflow.md](requirements-workflow.md), [requirements-vocabulary.md](requirements-vocabulary.md), [issue-tracker-local.md](issue-tracker-local.md), [issue-tracker-github.md](issue-tracker-github.md), [issue-tracker-gitlab.md](issue-tracker-gitlab.md), [triage-labels.md](triage-labels.md), [versioning.md](versioning.md), [domain.md](domain.md), and when the graph is enabled [graph.md](graph.md) (plus [graphifyignore.template](graphifyignore.template) as `<artifact-root>/.graphifyignore`). For "other" trackers, write `issue-tracker.md` from the user's description. Create product folders and files **lazily**; the skill that first needs one creates it. Re-runs preserve confirmed settings and show a diff of proposed changes.
+Write the files from the seeds in this folder: [requirements-workflow.md](requirements-workflow.md), [requirements-vocabulary.md](requirements-vocabulary.md), [issue-tracker-local.md](issue-tracker-local.md), [issue-tracker-github.md](issue-tracker-github.md), [issue-tracker-gitlab.md](issue-tracker-gitlab.md), [triage-labels.md](triage-labels.md), [versioning.md](versioning.md), [domain.md](domain.md), and when the graph is enabled [graph.md](graph.md) (plus [graphifyignore.template](graphifyignore.template) as `<artifact-root>/.graphifyignore`). For "other" trackers, write `issue-tracker.md` from the user's description. Seed `shared/GLOSSARY.md` and `shared/DECISIONS.md` from [GLOSSARY.skeleton.md](GLOSSARY.skeleton.md) and [DECISIONS.skeleton.md](DECISIONS.skeleton.md) (empty, with the format only) so the Preflight of the other skills can pass. Create every other product folder and file **lazily**; the skill that first needs one creates it, using the numbered layout in `requirements-workflow.md`. If a flat v2 artifact root already exists, offer `python3 <this-skill-dir>/scripts/migrate-layout.py <artifact-root>` (dry run first, `--apply` only on the user's go-ahead; it never overwrites and never runs git). Re-runs preserve confirmed settings and show a diff of proposed changes.
 
 ### 5. Done
 
@@ -87,7 +91,8 @@ Say what was written. Mention that `docs/agents/*.md` can be edited by hand and 
 
 End with `➡️ **Next step:** ...`.
 
-- New product or vague idea: `/grill-with-docs`, then `/create-product-vision`.
+- New system: `/project-canvas`, then `/create-product-vision`.
+- Existing system or vague idea: `/grill-with-docs`, then `/create-product-vision`.
 - Product narrative or brief in hand: `/create-product-vision`.
 - Raw requests waiting: `/triage`.
 - Graph enabled: invoke `graph-sync` once artifacts exist.

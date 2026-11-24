@@ -1,3 +1,8 @@
+---
+id: US-XXX
+status: draft      # draft | review | approved | deprecated
+version: 0.1.0     # X.Y.Z
+---
 # US-XXX: Outcome
 
 **Serves:** GOAL-XXX, CAP-XXX (optional EPIC-XXX, SPEC-XXX)

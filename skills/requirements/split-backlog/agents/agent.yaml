@@ -1,0 +1,21 @@
+schema: requirements-skills/agent-manifest/1
+name: "split-backlog"
+description: "Break a spec, capability or epic into thin vertical user stories, each declaring its blocking edges, and record them in BACKLOG.md or the configured tracker."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+  - "<artifact-root>/01-vision/PRODUCT-VISION.md"
+  - "<artifact-root>/shared/GLOSSARY.md"
+contract:
+  reads: "`01-vision/PRODUCT-VISION.md` (the CAPs), a spec or epic if given, `BACKLOG.md`."
+  writes: "`02-backlog/BACKLOG.md`: a table (capability, epic, story, name, blocked by, status, progress) and, per story, an **operations checklist** (`- [ ] operation: what it does`). Publishes to the tracker only on request."
+  gate: "the PO confirms the breakdown and the order."
+scripts: []
+next_steps:
+  - "spec-req"
+  - "apply-spec"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "split-backlog"
+  description: "Break a spec, capability or epic into thin vertical user stories, each declaring its blocking edges, and record them in BACKLOG.md or the configured tracker."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

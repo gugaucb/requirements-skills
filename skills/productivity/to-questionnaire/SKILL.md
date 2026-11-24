@@ -20,6 +20,10 @@ Turn something the user cannot answer alone into a **questionnaire**: a Markdown
 
 **From:** <user>, **To:** <recipient>, **How your answers will be used:** <where they go>
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+No file is required: it works from the conversation; it reads the glossary if one exists.
+
 ## Context
 
 One paragraph for a recipient who was not in the user's head.
@@ -48,4 +52,4 @@ Answers from the document are **evidence from the named person**. Record them in
 
 ## Next steps
 
-When answers come back: `/grill-with-docs` to absorb them, `/to-spec` if they complete a feature, or resolve the originating `/wayfinder` ticket.
+When answers come back: `/grill-with-docs` to absorb them, `/spec-req` if they complete a feature, or resolve the originating `/wayfinder` ticket.

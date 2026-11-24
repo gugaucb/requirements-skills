@@ -1,0 +1,17 @@
+schema: requirements-skills/agent-manifest/1
+name: "grill-me"
+description: "A relentless, stateless interview to sharpen a plan, requirement or change. Writes nothing."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  []
+contract: {}
+scripts: []
+next_steps:
+  - "grill-with-docs"
+  - "spec-req"
+  - "ask-req"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "grill-me"
+  description: "A relentless, stateless interview to sharpen a plan, requirement or change. Writes nothing."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "quick | exhaustive (default)"}}}

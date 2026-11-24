@@ -24,7 +24,7 @@ Work top to bottom at the boundary. The first **yes** wins.
 
 ## Requirements-specific defaults
 
-- `/grill-with-docs` to `/to-spec` to `/split-backlog`: **continue** in one context.
+- `/grill-with-docs` to `/spec-req` to `/split-backlog`: **continue** in one context.
 - Between stories in `/refine-request`: **clear**. Each story is self-contained; the artifacts are the memory.
 - After a change (CHG): continue until the impact report is confirmed, then **clear** before re-refining each Stale story.
 - `/retro`: run it in the session it looks back on, before clearing.

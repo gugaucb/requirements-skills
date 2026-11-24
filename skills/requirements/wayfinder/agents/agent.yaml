@@ -1,0 +1,18 @@
+schema: requirements-skills/agent-manifest/1
+name: "wayfinder"
+description: "Plan a huge, foggy requirements effort (more than one session can hold) as a shared map of decision tickets, and resolve them one at a time until the way to the destination is clear."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/issue-tracker.md (its Wayfinding operations)"
+contract: {}
+scripts: []
+next_steps:
+  - "create-product-vision"
+  - "spec-req"
+  - "split-backlog"
+  - "refine-request"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "wayfinder"
+  description: "Plan a huge, foggy requirements effort (more than one session can hold) as a shared map of decision tickets, and resolve them one at a time until the way to the destination is clear."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

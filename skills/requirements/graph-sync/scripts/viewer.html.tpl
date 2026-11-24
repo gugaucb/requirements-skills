@@ -53,14 +53,14 @@ label.chk{display:flex;gap:6px;align-items:center;padding:2px 0}
 "use strict";
 var D=JSON.parse(document.getElementById('data').textContent);
 var NS="http://www.w3.org/2000/svg";
-var TYPE_COLOR={GOAL:"#8b5cf6",CAP:"#6366f1",SPEC:"#14b8a6",EPIC:"#2dd4bf",US:"#3b82f6",FR:"#22c55e",NFR:"#84cc16",AC:"#eab308",DG:"#94a3b8",TC:"#f97316",FLD:"#0ea5e9",SCR:"#d946ef",DEC:"#ec4899",CHG:"#64748b"};
-var TYPE_NAME={GOAL:"Goal",CAP:"Capability",SPEC:"Spec",EPIC:"Epic",US:"User story",FR:"Functional req.",NFR:"Non-functional req.",AC:"Acceptance criterion",DG:"Diagram",TC:"Test case",FLD:"Field",SCR:"Screen",DEC:"Decision",CHG:"Change"};
+var TYPE_COLOR={GOAL:"#8b5cf6",CAP:"#6366f1",SPEC:"#14b8a6",EPIC:"#2dd4bf",US:"#3b82f6",FR:"#22c55e",NFR:"#84cc16",AC:"#eab308",DG:"#94a3b8",TC:"#f97316",FLD:"#0ea5e9",SCR:"#d946ef",DEC:"#ec4899",CHG:"#64748b",PLN:"#a3a3a3",JUS:"#f43f5e",OBJ:"#fb7185",BEN:"#34d399",PRD:"#38bdf8",RQT:"#a78bfa",STK:"#fbbf24",PRM:"#fdba74",ENT:"#2dd4bf",RSK:"#ef4444",TMP:"#94a3b8",CST:"#a3e635",EQP:"#60a5fa",RST:"#f97316"};
+var TYPE_NAME={GOAL:"Goal",CAP:"Capability",SPEC:"Spec",EPIC:"Epic",US:"User story",FR:"Functional req.",NFR:"Non-functional req.",AC:"Acceptance criterion",DG:"Diagram",TC:"Test case",FLD:"Field",SCR:"Screen",PLN:"Plan line",JUS:"Justification",OBJ:"SMART objective",BEN:"Benefit",PRD:"Product item",RQT:"Requirement (canvas)",STK:"Stakeholder",PRM:"Assumption",ENT:"Delivery group",RSK:"Risk",TMP:"Timeline",CST:"Cost",EQP:"Team",RST:"Constraint",DEC:"Decision",CHG:"Change"};
 var COL={GOAL:0,CAP:1,US:2,FLD:3,SCR:3,FR:3,NFR:3,AC:4,DG:4,TC:5};
-var BAND={SPEC:0,EPIC:0,DEC:1,CHG:2};
-var IMPACT_RELS={serves:1,part_of:1,decided_by:1,blocked_by:1,verifies:1,proves:1,uses:1};
-var RECORD_RELS={changes:1,impacts:1,needs_decision:1,changed_by:1,superseded_by:1};
-var REL_LABEL={uses:"uses",serves:"serves",part_of:"part of",verifies:"verifies",proves:"proves",blocked_by:"blocked by",decided_by:"decided by",references:"references (weak)",records:"change records",redundant:"redundant skip-level links"};
-var REL_DEFAULT={uses:true,serves:true,part_of:true,verifies:true,proves:true,blocked_by:true,decided_by:false,references:false,records:false,redundant:false};
+var BAND={SPEC:0,EPIC:0,PLN:0,DEC:1,CHG:2,JUS:3,OBJ:3,BEN:3,PRD:3,RQT:3,STK:3,PRM:3,ENT:3,RSK:3,TMP:3,CST:3,EQP:3,RST:3};
+var IMPACT_RELS={serves:1,part_of:1,decided_by:1,blocked_by:1,verifies:1,proves:1,uses:1,traces_to:1};
+var RECORD_RELS={plans:1,changes:1,impacts:1,needs_decision:1,changed_by:1,superseded_by:1};
+var REL_LABEL={traces_to:"traces to",uses:"uses",serves:"serves",part_of:"part of",verifies:"verifies",proves:"proves",blocked_by:"blocked by",decided_by:"decided by",references:"references (weak)",records:"change records",redundant:"redundant skip-level links"};
+var REL_DEFAULT={traces_to:false,uses:true,serves:true,part_of:true,verifies:true,proves:true,blocked_by:true,decided_by:false,references:false,records:false,redundant:false};
 var STATUS_COLOR={"Stale":"#ef4444","Blocked":"#f59e0b","Needs changes":"#f59e0b","Pending":"#f59e0b","Draft":"#94a3b8","Proposed":"#60a5fa","Ready for human review":"#3b82f6","Ready (team agreement)":"#16a34a","Confirmed":"#16a34a","Retired":"#6b7280","Superseded":"#6b7280"};
 var NODE_W=170,NODE_H=40,COLW=240,ROWH=52,PAD=40;
 
@@ -81,7 +81,7 @@ D.nodes.forEach(function(n){state.types[n.type]=true;});
 /* ---------- layout: layered columns + bottom bands, barycenter ordering ---------- */
 var pos={};
 function layout(){
-  var cols={},bands={0:[],1:[],2:[]};
+  var cols={},bands={0:[],1:[],2:[],3:[]};
   D.nodes.forEach(function(n){
     if(n.type in COL){(cols[COL[n.type]]=cols[COL[n.type]]||[]).push(n.id);}
     else{bands[BAND[n.type]||0].push(n.id);}
@@ -115,7 +115,7 @@ function layout(){
     cols[c].forEach(function(id,i){pos[id]={x:PAD+c*COLW,y:PAD+i*ROWH};});
   });
   var y=PAD+maxRows*ROWH+60;
-  [0,1,2].forEach(function(b){
+  [0,1,2,3].forEach(function(b){
     var ids=bands[b].sort();if(!ids.length)return;
     var cap=Math.max(4,order.length+1);
     ids.forEach(function(id,i){pos[id]={x:PAD+(i%cap)*(COLW*0.78),y:y+Math.floor(i/cap)*ROWH};});

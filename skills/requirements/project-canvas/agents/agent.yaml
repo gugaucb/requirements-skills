@@ -1,0 +1,22 @@
+schema: requirements-skills/agent-manifest/1
+name: "project-canvas"
+description: "Guide the sponsor through a Project Model Canvas for a new system (justifications, product, SMART objectives, benefits, requirements, stakeholders, assumptions, deliveries, risks, constraints, timeline, team, costs) and check its integration rules."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+contract:
+  reads: "a narrative, minutes, or an existing `PROJECT-CANVAS.md`."
+  writes: "`00-canvas/PROJECT-CANVAS.md` from [CANVAS-TEMPLATE.md](CANVAS-TEMPLATE.md), status `Draft`."
+  gate: "the sponsor validates the canvas; record it as a DEC. Never write sponsor approval yourself."
+scripts:
+  - "scripts/canvas-check.py"
+next_steps:
+  - "create-product-vision"
+  - "wayfinder"
+  - "to-questionnaire"
+  - "ask-req"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "project-canvas"
+  description: "Guide the sponsor through a Project Model Canvas for a new system (justifications, product, SMART objectives, benefits, requirements, stakeholders, assumptions, deliveries, risks, constraints, timeline, team, costs) and check its integration rules."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

@@ -8,6 +8,16 @@ A loose idea has arrived, too big for one session and wrapped in fog: a whole pr
 
 Where grilling sharpens an idea you can hold in one session, wayfinder is for the idea you cannot. It is slower and denser: never use it on a well-scoped story.
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+Check that these exist before doing anything else:
+
+- `docs/agents/issue-tracker.md` (its Wayfinding operations)
+
+If any of them is missing, **stop**. Do not invent, assume or reconstruct the missing data. Tell the user which inputs are missing and which skill produces each (`/setup-requirements-repo` for configuration, `/project-canvas` or `/create-product-vision` for the vision, `/split-backlog` for the backlog, `/spec-req` for specs, `/grill-with-docs` or `/to-questionnaire` for missing decisions); when several are missing or the way forward is unclear, tell the user to run `/wayfinder`.
+
+Also read, when relevant: `docs/agents/requirements-workflow.md`; the loose idea, from the conversation.
+
 ## Plan, don't specify
 
 The map produces **decisions, not deliverables**. It is done when nothing is left to decide before someone writes the vision or spec. The pull to just write the stories is the signal you reached the edge of the map: hand off.
@@ -80,7 +90,7 @@ The user arrives with a loose idea.
 2. **Map the frontier.** Grill again, breadth first: fan out across the whole space. If no fog appears (the way is clear, the journey fits one session), skip the map and tell the user to run `/grill-with-docs` or `/create-product-vision`.
 3. **Create the map** with Destination and Notes filled, Decisions so far empty, fog sketched.
 4. **Create the specifiable tickets**, then wire blocking edges in a **second pass** (ids exist first; use real ids in cross-references).
-5. **Fire research tickets** in parallel, each in a sub-agent with a fresh context window; capture findings under `research/` with a pointer from the ticket.
+5. **Fire research tickets** in parallel, each in a sub-agent with a fresh context window; capture findings under `inputs/research/` with a pointer from the ticket.
 6. Stop. Charting is one session's work and resolves nothing by hand.
 
 ### Work through the map
@@ -100,5 +110,5 @@ Others may run unblocked tickets in parallel, so expect concurrent edits.
 When the map is clear it **hands off, it does not specify**. End with `➡️ **Next step:** ...`.
 
 - Destination was a vision: `/create-product-vision`, collapsing the map's linked decisions.
-- Destination was a feature or capability: `/to-spec`, then `/split-backlog`.
+- Destination was a feature or capability: `/spec-req`, then `/split-backlog`.
 - Effort turned out small: `/refine-request`.

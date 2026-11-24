@@ -1,0 +1,21 @@
+schema: requirements-skills/agent-manifest/1
+name: "write-user-story"
+description: "Create or revise a classic As a / I want / So that user story file with explicit scope, exclusions and links to goals and capabilities. Use when expressing a user outcome or when an existing story is altered."
+invocation: model   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "docs/agents/requirements-workflow.md"
+  - "<artifact-root>/02-backlog/BACKLOG.md (the story row)"
+  - "<artifact-root>/01-vision/PRODUCT-VISION.md"
+  - "<artifact-root>/shared/GLOSSARY.md"
+  - "<artifact-root>/shared/DECISIONS.md"
+contract: {}
+scripts: []
+next_steps:
+  - "specify-requirements"
+  - "split-backlog"
+  - "grilling"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "write-user-story"
+  description: "Create or revise a classic As a / I want / So that user story file with explicit scope, exclusions and links to goals and capabilities. Use when expressing a user outcome or when an existing story is altered."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

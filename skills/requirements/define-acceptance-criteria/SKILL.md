@@ -5,6 +5,15 @@ description: Write externally observable acceptance criteria in Gherkin Given / 
 
 Read the story, its FR/NFR and the configured output language in `docs/agents/requirements-workflow.md`. Gherkin keywords follow the locale (for pt-BR: `Funcionalidade`, `Cenário`, `Dado`, `Quando`, `Então`). If the story is being altered, invoke `impact-analysis` first.
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+Check that these exist before doing anything else:
+
+- `docs/agents/requirements-workflow.md`
+- `<artifact-root>/04-stories/US-NNN.md` with FR and NFR rows
+
+If any of them is missing, **stop**. Do not invent, assume or reconstruct the missing data. Tell the user which inputs are missing and which skill produces each (`/setup-requirements-repo` for configuration, `/project-canvas` or `/create-product-vision` for the vision, `/split-backlog` for the backlog, `/spec-req` for specs, `/grill-with-docs` or `/to-questionnaire` for missing decisions); when several are missing or the way forward is unclear, tell the user to run `/wayfinder`.
+
 ## Procedure
 
 1. Give each verifiable business condition a unique `AC-NNN` and one `Scenario`.

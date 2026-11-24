@@ -4,9 +4,9 @@ How the requirements skills read business vocabulary and decisions.
 
 ## Before working, read
 
-- `GLOSSARY.md` at the product root, or `GLOSSARY-MAP.md` if it exists (one `GLOSSARY.md` per context).
-- `DECISIONS.md` for the area you touch.
-- `PRODUCT-VISION.md` when present.
+- `shared/GLOSSARY.md`, or `shared/GLOSSARY-MAP.md` if it exists (one `GLOSSARY.md` per context).
+- `shared/DECISIONS.md` for the area you touch.
+- `01-vision/PRODUCT-VISION.md` when present.
 
 Missing files: proceed silently; `domain-modeling` creates them lazily.
 

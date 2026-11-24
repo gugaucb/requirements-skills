@@ -5,6 +5,17 @@ description: Review a product vision for consistent vocabulary, unapproved assum
 
 Inspect `PRODUCT-VISION.md`, `DECISIONS.md` and `GLOSSARY.md`, using the vision gates in `review-readiness/QUALITY-GATES.md`.
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+Check that these exist before doing anything else:
+
+- `<artifact-root>/01-vision/PRODUCT-VISION.md`
+- `<artifact-root>/shared/DECISIONS.md`
+
+If any of them is missing, **stop**. Do not invent, assume or reconstruct the missing data. Tell the user which inputs are missing and which skill produces each (`/setup-requirements-repo` for configuration, `/project-canvas` or `/create-product-vision` for the vision, `/split-backlog` for the backlog, `/spec-req` for specs, `/grill-with-docs` or `/to-questionnaire` for missing decisions); when several are missing or the way forward is unclear, tell the user to run `/wayfinder`.
+
+Also read, when relevant: `<artifact-root>/shared/GLOSSARY.md`.
+
 ## Procedure
 
 1. Check every GOAL and CAP for evidence, coherent scope, observable value, unanswered dependencies, overlap, duplicate IDs, contradictions and coverage (each goal has a capability; each capability serves a goal).
@@ -18,4 +29,4 @@ Every finding names an ID and an owner; the report states plainly whether human 
 
 ## Next steps
 
-End with `➡️ **Next step:** ...`. Findings: `/grill-with-docs` to settle them, or `/create-product-vision` to revise. Clean: ask the PO to approve, record it as a DEC, then `/to-spec`.
+End with `➡️ **Next step:** ...`. Findings: `/grill-with-docs` to settle them, or `/create-product-vision` to revise. Clean: ask the PO to approve, record it as a DEC, then `/spec-req`.

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Spec Req"
+  short_description: "Turn a backlog story, the current conversation or meeting minutes into a spec with the strategy to"
+policy:
+  allow_implicit_invocation: false

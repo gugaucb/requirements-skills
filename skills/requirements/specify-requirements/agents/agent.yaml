@@ -1,0 +1,19 @@
+schema: requirements-skills/agent-manifest/1
+name: "specify-requirements"
+description: "Write atomic functional requirements and measurable non-functional requirements into a story's tables, with evidence and source decisions. Use when elaborating story behavior and constraints."
+invocation: model   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "<artifact-root>/04-stories/US-NNN.md with its Scope and rules"
+  - "<artifact-root>/shared/DECISIONS.md"
+  - "<artifact-root>/shared/GLOSSARY.md"
+contract: {}
+scripts: []
+next_steps:
+  - "define-acceptance-criteria"
+  - "grilling"
+  - "domain-modeling"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "specify-requirements"
+  description: "Write atomic functional requirements and measurable non-functional requirements into a story's tables, with evidence and source decisions. Use when elaborating story behavior and constraints."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

@@ -5,6 +5,14 @@ description: Create Mermaid flow, state or sequence diagrams when needed to clar
 
 Prefer no diagram for a simple single outcome; write `Not needed` in the story. Draw when branches, states or actor hand-offs cause ambiguity.
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+Check that these exist before doing anything else:
+
+- `<artifact-root>/04-stories/US-NNN.md`
+
+If any of them is missing, **stop**. Do not invent, assume or reconstruct the missing data. Tell the user which inputs are missing and which skill produces each (`/setup-requirements-repo` for configuration, `/project-canvas` or `/create-product-vision` for the vision, `/split-backlog` for the backlog, `/spec-req` for specs, `/grill-with-docs` or `/to-questionnaire` for missing decisions); when several are missing or the way forward is unclear, tell the user to run `/wayfinder`.
+
 ## Procedure
 
 1. Pick the form: `flowchart` (decisions, journeys), `stateDiagram-v2` (lifecycle), `sequenceDiagram` (actor interactions).

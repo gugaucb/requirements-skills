@@ -1,0 +1,21 @@
+schema: requirements-skills/agent-manifest/1
+name: "setup-requirements-repo"
+description: "Configure this repo for the requirements skills (artifact root, issue tracker, output language, ID and status policy, triage labels, domain doc layout). Run once per repo before the other requirements skills."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  []
+contract: {}
+scripts:
+  - "scripts/migrate-layout.py"
+next_steps:
+  - "project-canvas"
+  - "create-product-vision"
+  - "grill-with-docs"
+  - "triage"
+  - "graph-sync"
+  - "ask-req"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "setup-requirements-repo"
+  description: "Configure this repo for the requirements skills (artifact root, issue tracker, output language, ID and status policy, triage labels, domain doc layout). Run once per repo before the other requirements skills."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

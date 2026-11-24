@@ -1,0 +1,15 @@
+schema: requirements-skills/agent-manifest/1
+name: "retro"
+description: "Conduct a retrospective on a refinement session and suggest improvements to the requirements environment."
+invocation: user   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "the session or logs to look back on"
+contract: {}
+scripts: []
+next_steps:
+  - "ask-req"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "retro"
+  description: "Conduct a retrospective on a refinement session and suggest improvements to the requirements environment."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

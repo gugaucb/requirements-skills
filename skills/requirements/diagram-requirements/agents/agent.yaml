@@ -1,0 +1,16 @@
+schema: requirements-skills/agent-manifest/1
+name: "diagram-requirements"
+description: "Create Mermaid flow, state or sequence diagrams when needed to clarify a user journey or business rule. Use only for meaningful complexity."
+invocation: model   # user: only when the human types it; model: the agent may reach for it
+instructions: "AGENTS.md"   # root instructions; CLAUDE.md and GEMINI.md point there
+requires:   # Preflight: stop and ask when any is missing; never invent
+  - "<artifact-root>/04-stories/US-NNN.md"
+contract: {}
+scripts: []
+next_steps:
+  - "audit-traceability"
+  - "review-readiness"
+mcp_tool:   # shaped like an MCP tool definition, for hosts that expose skills as tools
+  name: "diagram-requirements"
+  description: "Create Mermaid flow, state or sequence diagrams when needed to clarify a user journey or business rule. Use only for meaningful complexity."
+  inputSchema: {"type": "object", "properties": {"arguments": {"type": "string", "description": "Free text: what to do, or the ID to work on"}}}

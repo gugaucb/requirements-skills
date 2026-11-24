@@ -1,0 +1,5 @@
+interface:
+  display_name: "Project Canvas"
+  short_description: "Guide the sponsor through a Project Model Canvas for a new system (justifications, product, SMART"
+policy:
+  allow_implicit_invocation: false

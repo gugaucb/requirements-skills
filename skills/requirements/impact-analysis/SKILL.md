@@ -7,6 +7,17 @@ Make the effect of a change visible **before** it is applied. Impact is derived 
 
 Read `docs/agents/requirements-workflow.md` for the artifact root, then the traceability model in [TRACEABILITY.md](../audit-traceability/TRACEABILITY.md).
 
+## Preflight (Pré-condições / Insumos Obrigatórios)
+
+Check that these exist before doing anything else:
+
+- `docs/agents/requirements-workflow.md`
+- the artifact being changed (an ID that exists under the artifact root)
+
+If any of them is missing, **stop**. Do not invent, assume or reconstruct the missing data. Tell the user which inputs are missing and which skill produces each (`/setup-requirements-repo` for configuration, `/project-canvas` or `/create-product-vision` for the vision, `/split-backlog` for the backlog, `/spec-req` for specs, `/grill-with-docs` or `/to-questionnaire` for missing decisions); when several are missing or the way forward is unclear, tell the user to run `/wayfinder`.
+
+Also read, when relevant: `docs/agents/graph.md` (graph-first path).
+
 ## Procedure
 
 1. **State the change.** Which IDs, from what to what, why, who asked, status (Proposed or Confirmed). Classify it: `rule`, `scope`, `actor`, `metric`, `term`, `priority`, `removal`. Done when each changed ID has a one-line before and after.
@@ -22,7 +33,15 @@ Read `docs/agents/requirements-workflow.md` for the artifact root, then the trac
    - **Needs review**: may still hold, a human or `refine-request` must re-check.
    - **Unaffected (checked)**: looked at, still holds. List these too; silence reads as "not looked at".
 
-6. **Write the report** with [CHANGE-IMPACT-FORMAT.md](CHANGE-IMPACT-FORMAT.md) to `<artifact-root>/changes/CHG-NNN.md` (stateful callers) or present it in chat (stateless callers). Done when every touched ID is classified and the report names the PO decisions it needs.
+A minimal impact table (full format in [CHANGE-IMPACT-FORMAT.md](CHANGE-IMPACT-FORMAT.md)):
+
+| ID | Relation | Classification | Action |
+| --- | --- | --- | --- |
+| AC-012 | downstream of FR-007 | Invalidated | Rewrite |
+| US-004 | sideways (same term "active") | Needs review | Check rule R3 |
+| CAP-002 | upstream | Unaffected (checked) | Still served |
+
+6. **Write the report** with [CHANGE-IMPACT-FORMAT.md](CHANGE-IMPACT-FORMAT.md) to `<artifact-root>/05-changes/CHG-NNN.md` (stateful callers) or present it in chat (stateless callers). Done when every touched ID is classified and the report names the PO decisions it needs.
 
 7. **Mark, do not rewrite.** For stateful callers, set impacted downstream items to status `Stale` and add one line to their change history pointing at the CHG file. Do not edit downstream content without the user's go-ahead. Then, if the graph is enabled, invoke `graph-sync` so the `Stale` statuses and the new CHG are in it. Keep IDs; a retired item is marked `Superseded by <ID>` or `Retired`, never deleted or renumbered.
 

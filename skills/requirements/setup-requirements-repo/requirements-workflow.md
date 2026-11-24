@@ -23,13 +23,28 @@
 
 ## Layout
 
+One folder per phase, numbered in flow order. Scripts recognise files by name, so a flat v2 layout still works; `scripts/migrate-layout.py` moves it.
+
 ```
 <artifact-root>/
-  PRODUCT-VISION.md  BACKLOG.md  GLOSSARY.md  DECISIONS.md  OUT-OF-SCOPE.md
-  requests/NN-slug.md
-  specs/SPEC-NNN-slug.md
-  stories/US-NNN.md
-  changes/CHG-NNN.md
-  research/  wayfinder/<effort>/  diagrams/
-  graph/req-graph.json, req-graph.html  (derived; optional, see graph.md)
+  00-canvas/    PROJECT-CANVAS.md                 phase 1 (new systems)
+  01-vision/    PRODUCT-VISION.md                 phase 1
+  02-backlog/   BACKLOG.md                        phase 2 (WBS, stories, operations checklist)
+  03-specs/     SPEC-NNN-slug.md                  phase 3 (strategy, plan of changes)
+  04-stories/   US-NNN.md                         phase 4
+  05-changes/   CHG-NNN.md                        phase 4 and 5
+  inputs/       minutes/  requests/  research/    raw evidence, never edited by skills
+  shared/       GLOSSARY.md  DECISIONS.md  OUT-OF-SCOPE.md
+  wayfinder/<effort>/   diagrams/                working material
+  graph/        req-graph.json, req-graph.html    derived; optional, see graph.md
 ```
+
+## Phases (what each reads and writes)
+
+| Phase | Skill | Reads | Writes | Human gate |
+| --- | --- | --- | --- | --- |
+| 1 | `/project-canvas`, `/create-product-vision` | narrative, minutes | `00-canvas/`, `01-vision/` | sponsor approves the vision (DEC) |
+| 2 | `/split-backlog` | CAPs of the vision | `02-backlog/BACKLOG.md` | PO confirms order |
+| 3 | `/spec-req` | a backlog story, a conversation or minutes | `03-specs/SPEC-NNN` with the plan of changes | PO approves the spec |
+| 4 | `/apply-spec` | approved spec | updated artifacts, `04-stories/`, `05-changes/` | PO reviews |
+| 5 | `/review-spec` | spec, changes, graph | review report in the spec | PO signs |

@@ -4,8 +4,8 @@ Stories, specs and wayfinder maps live as files under the artifact root. No remo
 
 ## Conventions
 
-- Stories: `<artifact-root>/stories/US-NNN.md`; backlog index: `BACKLOG.md`.
-- Triage state is a `Status:` line near the top of each incoming request file in `<artifact-root>/requests/NN-slug.md`; comments append under `## Comments`.
+- Stories: `<artifact-root>/04-stories/US-NNN.md`; backlog index: `BACKLOG.md`.
+- Triage state is a `Status:` line near the top of each incoming request file in `<artifact-root>/inputs/requests/NN-slug.md`; comments append under `## Comments`.
 
 ## When a skill says "publish to the issue tracker"
 

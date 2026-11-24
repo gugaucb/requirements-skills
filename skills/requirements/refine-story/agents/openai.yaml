@@ -1,0 +1,3 @@
+interface:
+  display_name: "Refine Story"
+  short_description: "Take one story through the refinement pipeline (decisions, story text, requirements, acceptance"
